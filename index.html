@@ -86,12 +86,12 @@
     /* ── TOOL SECTION ── */
     .tool-wrap {
       width: 100%;
-      max-width: 680px;
+      max-width: 720px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
-      padding: 0 1rem 3rem;
+      gap: 1.4rem;
+      padding: 0 1rem 1rem;
     }
 
     #drop-zone {
@@ -101,13 +101,15 @@
       padding: 3rem 2rem;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
       background: #141820;
+      outline: none;
     }
 
-    #drop-zone:hover {
+    #drop-zone:hover, #drop-zone:focus-visible {
       border-color: #3d5080;
       background: #161c28;
+      box-shadow: 0 0 0 3px rgba(41,194,245,0.18);
     }
 
     #drop-zone.drag-over {
@@ -139,15 +141,49 @@
 
     #file-input { display: none; }
 
-    #options {
+    /* ── OPTIONS PANEL ── */
+    .options-panel {
+      width: 100%;
+      background: #141820;
+      border: 1px solid #1e2435;
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
       display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    label { font-size: 0.88rem; color: #7a8494; display: flex; align-items: center; gap: 0.45rem; }
+    .options-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .options-row + .options-row {
+      padding-top: 0.9rem;
+      border-top: 1px solid #1e2435;
+    }
+
+    .opt-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #4a5468;
+      flex: 0 0 100%;
+      margin-bottom: -0.3rem;
+    }
+
+    label {
+      font-size: 0.88rem;
+      color: #7a8494;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      user-select: none;
+    }
 
     input[type=number] {
       width: 64px;
@@ -159,13 +195,115 @@
       font-size: 0.88rem;
     }
 
-    input[type=checkbox] { accent-color: #29c2f5; }
+    input[type=range] {
+      accent-color: #29c2f5;
+      cursor: pointer;
+    }
 
+    input[type=checkbox] { accent-color: #29c2f5; cursor: pointer; }
+
+    input[type=color] {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #2e3545;
+      border-radius: 5px;
+      background: none;
+      padding: 1px;
+      cursor: pointer;
+    }
+
+    .range-val {
+      font-size: 0.82rem;
+      color: #29c2f5;
+      min-width: 2.2em;
+      text-align: right;
+    }
+
+    /* Mode tabs */
+    .mode-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .mode-tab {
+      background: #1a1e28;
+      border: 1px solid #2e3545;
+      border-radius: 7px;
+      color: #5a6478;
+      font-size: 0.8rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0.32rem 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mode-tab.active {
+      background: #29c2f5;
+      border-color: #29c2f5;
+      color: #06101a;
+    }
+
+    .mode-tab:hover:not(.active) {
+      border-color: #3d5080;
+      color: #9aa4ba;
+    }
+
+    /* color-mode extra controls */
+    #color-opts {
+      display: none;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    #color-opts.visible { display: flex; }
+
+    /* bg-remove status */
+    #bgr-status {
+      font-size: 0.78rem;
+      color: #4a5468;
+      letter-spacing: 0.04em;
+    }
+
+    /* global status */
     #status {
       font-size: 0.82rem;
       color: #4a5468;
       min-height: 1.2em;
       letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    /* ── TOOLBAR (Download All) ── */
+    #toolbar {
+      display: none;
+      width: 100%;
+      max-width: 920px;
+      padding: 0 1rem;
+      justify-content: flex-end;
+      gap: 0.7rem;
+    }
+
+    #toolbar.visible { display: flex; }
+
+    .btn-toolbar {
+      background: #1a1e28;
+      border: 1px solid #2e3545;
+      border-radius: 8px;
+      color: #9aa4ba;
+      font-size: 0.82rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.45rem 1.1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-toolbar:hover {
+      border-color: #29c2f5;
+      color: #29c2f5;
     }
 
     /* ── RESULTS ── */
@@ -192,7 +330,7 @@
       padding: 0.8rem 1.1rem;
       background: #181e2c;
       border-bottom: 1px solid #1e2435;
-      gap: 1rem;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
 
@@ -200,6 +338,7 @@
       font-size: 0.83rem;
       color: #9aa4ba;
       word-break: break-all;
+      flex: 1 1 auto;
     }
 
     .result-header .meta {
@@ -208,23 +347,37 @@
       white-space: nowrap;
     }
 
-    .result-header .btn-download {
-      background: #29c2f5;
-      color: #06101a;
-      border: none;
+    .card-actions {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-action {
+      border: 1px solid #2e3545;
       border-radius: 7px;
-      padding: 0.38rem 1rem;
-      font-size: 0.83rem;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
       font-weight: 600;
       font-family: 'Barlow', sans-serif;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s, transform 0.1s;
+      transition: all 0.15s;
       letter-spacing: 0.02em;
+      background: #1a1e28;
+      color: #7a8494;
     }
 
-    .result-header .btn-download:hover { background: #45cefc; }
-    .result-header .btn-download:active { transform: scale(0.97); }
+    .btn-action:hover { border-color: #3d5080; color: #9aa4ba; }
+    .btn-action:active { transform: scale(0.97); }
+    .btn-action.primary {
+      background: #29c2f5;
+      border-color: #29c2f5;
+      color: #06101a;
+    }
+    .btn-action.primary:hover { background: #45cefc; border-color: #45cefc; }
+    .btn-action.copied { background: #1e3a2a; border-color: #2a7a4a; color: #4adf8a; }
 
     .preview-row {
       display: grid;
@@ -263,10 +416,155 @@
       border-radius: 5px;
     }
 
+    /* processing overlay on card */
+    .card-processing {
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.84rem;
+      color: #4a5468;
+      letter-spacing: 0.06em;
+    }
+
     .error-msg {
       color: #e05555;
       font-size: 0.84rem;
       padding: 1rem;
+    }
+
+    /* ── BGR controls ── */
+    .opt-label-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #1a55b8, #29c2f5);
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.05em 0.4em;
+      vertical-align: middle;
+      margin-left: 0.3em;
+      position: relative;
+      top: -1px;
+    }
+
+    .bgr-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .bgr-state {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .bgr-msg {
+      font-size: 0.82rem;
+      color: #5a6478;
+      letter-spacing: 0.03em;
+    }
+
+    .bgr-ready-dot { color: #4adf8a; font-size: 0.7rem; }
+    .bgr-err-dot   { color: #e05555; font-size: 0.82rem; }
+
+    .bgr-toggle-label {
+      font-size: 0.85rem;
+      color: #7a8494;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Load / retry button */
+    .btn-bgr-load {
+      background: #1a1e28;
+      border: 1px solid #2e3545;
+      border-radius: 7px;
+      color: #9aa4ba;
+      font-size: 0.8rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.35rem 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-bgr-load:hover { border-color: #29c2f5; color: #29c2f5; }
+
+    /* ℹ button */
+    .btn-bgr-info {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1px solid #2e3545;
+      background: #1a1e28;
+      color: #4a5468;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-bgr-info:hover { border-color: #29c2f5; color: #29c2f5; }
+
+    /* Tooltip */
+    .bgr-tooltip {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      z-index: 100;
+      width: min(340px, 90vw);
+      background: #1a1e2e;
+      border: 1px solid #2e3a55;
+      border-radius: 10px;
+      padding: 1rem 1rem 0.85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+      font-size: 0.82rem;
+      color: #8a94a8;
+      line-height: 1.6;
+    }
+
+    .bgr-tooltip strong {
+      display: block;
+      color: #c8d0e0;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .bgr-tooltip p + p { margin-top: 0.5rem; }
+
+    .bgr-tooltip-close {
+      position: absolute;
+      top: 0.55rem; right: 0.65rem;
+      background: none;
+      border: none;
+      color: #4a5468;
+      cursor: pointer;
+      font-size: 0.78rem;
+      line-height: 1;
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+    .bgr-tooltip-close:hover { color: #9aa4ba; }
+
+    /* spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      display: inline-block;
+      width: 1em; height: 1em;
+      border: 2px solid #29c2f530;
+      border-top-color: #29c2f5;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.5em;
     }
   </style>
 </head>
@@ -314,41 +612,24 @@
           </filter>
         </defs>
 
-        <!-- checkerboard behind blue -->
         <rect x="62" y="62" width="76" height="76" fill="url(#checker)"/>
-        <!-- blue fill -->
         <rect x="62" y="70" width="76" height="68" fill="url(#blueGrad)"/>
-
-        <!-- 3D depth faces -->
         <polygon points="50,148 58,156 150,156 142,148" fill="url(#metalDepthB)"/>
         <polygon points="142,58 150,50 150,156 142,148" fill="url(#metalDepthR)"/>
-
-        <!-- main frame face -->
         <rect x="50" y="50" width="92" height="98" rx="2" fill="url(#metalFace)" filter="url(#frameShad)"/>
-        <!-- cutout -->
         <rect x="62" y="62" width="68" height="74" fill="#0c1018"/>
-        <!-- inner ring -->
         <rect x="62" y="62" width="68" height="74" rx="1" fill="none" stroke="url(#innerRing)" stroke-width="3"/>
-        <!-- top highlight -->
         <rect x="50" y="50" width="92" height="2.5" rx="1" fill="#f2f4f8" opacity="0.7"/>
         <rect x="50" y="50" width="2.5" height="98" rx="1" fill="#eaecf2" opacity="0.5"/>
-
-        <!-- handle tab -->
         <rect x="136" y="136" width="22" height="9" rx="2" fill="url(#metalFace)"/>
         <rect x="136" y="145" width="22" height="3" rx="1" fill="url(#metalDepthB)"/>
-
-        <!-- arrows -->
         <g filter="url(#arrowShad)">
-          <!-- top ↓ -->
           <line x1="100" y1="18" x2="100" y2="42" stroke="#ccd4e4" stroke-width="3" stroke-linecap="round"/>
           <polygon points="93,37 100,50 107,37" fill="#ccd4e4"/>
-          <!-- bottom ↑ -->
           <line x1="100" y1="158" x2="100" y2="182" stroke="#ccd4e4" stroke-width="3" stroke-linecap="round"/>
           <polygon points="93,163 100,150 107,163" fill="#ccd4e4"/>
-          <!-- left → -->
           <line x1="16" y1="100" x2="42" y2="100" stroke="#ccd4e4" stroke-width="3" stroke-linecap="round"/>
           <polygon points="37,93 50,100 37,107" fill="#ccd4e4"/>
-          <!-- right ← -->
           <line x1="158" y1="100" x2="184" y2="100" stroke="#ccd4e4" stroke-width="3" stroke-linecap="round"/>
           <polygon points="163,93 150,100 163,107" fill="#ccd4e4"/>
         </g>
@@ -364,100 +645,356 @@
 
   <!-- ── TOOL ── -->
   <div class="tool-wrap">
-    <div id="drop-zone">
-      <span class="drop-icon">🖼️</span>
+
+    <!-- Drop Zone -->
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop PNG or WebP images here, or press Enter to browse">
+      <span class="drop-icon" aria-hidden="true">🖼️</span>
       <p>Drop PNG or WebP files here, or click to browse</p>
       <span class="drop-hint">PNG &amp; WebP · Multiple files supported</span>
       <input type="file" id="file-input" accept=".png,.webp,image/png,image/webp" multiple />
     </div>
 
-    <div id="options">
-      <label>
-        <input type="checkbox" id="opt-padding" />
-        Add padding (px)
-        <input type="number" id="padding-val" value="0" min="0" max="500" />
-      </label>
+    <!-- Options Panel -->
+    <div class="options-panel" role="group" aria-label="Processing options">
+
+      <!-- Crop mode row -->
+      <div class="options-row">
+        <span class="opt-label">Crop Mode</span>
+        <div class="mode-tabs" role="group" aria-label="Crop mode">
+          <button class="mode-tab active" id="tab-alpha" aria-pressed="true">Transparency</button>
+          <button class="mode-tab" id="tab-color" aria-pressed="false">Color trim</button>
+        </div>
+        <!-- Color mode extras (shown when color tab active) -->
+        <div id="color-opts" aria-hidden="true">
+          <label for="trim-color">Color</label>
+          <input type="color" id="trim-color" value="#ffffff" title="Background color to trim" />
+          <label for="trim-tolerance">Tolerance</label>
+          <input type="range" id="trim-tolerance" min="0" max="128" value="20" style="width:90px" />
+          <span class="range-val" id="tol-val" aria-live="polite">20</span>
+        </div>
+      </div>
+
+      <!-- Padding row -->
+      <div class="options-row">
+        <span class="opt-label">Padding</span>
+        <label for="opt-padding">
+          <input type="checkbox" id="opt-padding" />
+          Add padding (px)
+        </label>
+        <input type="range" id="padding-slider" min="0" max="200" value="0" style="width:110px" disabled aria-label="Padding amount in pixels" />
+        <span class="range-val" id="pad-val" aria-live="polite">0</span>
+        <input type="number" id="padding-num" value="0" min="0" max="500" aria-label="Padding value" disabled />
+      </div>
+
+      <!-- Background removal row -->
+      <div class="options-row" id="bgr-row">
+        <span class="opt-label">Background Removal <span class="opt-label-badge">AI</span></span>
+        <div class="bgr-controls">
+          <!-- State: not loaded -->
+          <div id="bgr-state-idle" class="bgr-state">
+            <button class="btn-bgr-load" id="btn-bgr-load">⬇ Load model</button>
+            <button class="btn-bgr-info" id="btn-bgr-info" aria-label="What is this?" title="What is this?">ℹ</button>
+          </div>
+          <!-- State: loading -->
+          <div id="bgr-state-loading" class="bgr-state" hidden>
+            <span class="spinner"></span>
+            <span class="bgr-msg">Downloading AI model… <span id="bgr-progress"></span></span>
+          </div>
+          <!-- State: ready -->
+          <div id="bgr-state-ready" class="bgr-state" hidden>
+            <span class="bgr-ready-dot" aria-hidden="true">●</span>
+            <span class="bgr-msg">Model ready</span>
+            <label class="bgr-toggle-label" for="opt-bgremove">
+              <input type="checkbox" id="opt-bgremove" />
+              Apply on next drop
+            </label>
+          </div>
+          <!-- State: error -->
+          <div id="bgr-state-error" class="bgr-state" hidden>
+            <span class="bgr-err-dot" aria-hidden="true">✕</span>
+            <span class="bgr-msg" id="bgr-err-msg">Failed to load</span>
+            <button class="btn-bgr-load btn-bgr-retry" id="btn-bgr-retry">Retry</button>
+          </div>
+        </div>
+
+        <!-- Info tooltip -->
+        <div id="bgr-tooltip" class="bgr-tooltip" role="tooltip" hidden>
+          <strong>AI Background Removal</strong>
+          <p>Uses the <em>RMBG-1.4</em> model (~40&nbsp;MB, downloaded once and cached by your browser) to erase image backgrounds before cropping. Processing happens entirely on your device — nothing is uploaded anywhere.</p>
+          <p>Best for subjects with a clear foreground (people, objects, logos). Works on PNG &amp; WebP.</p>
+          <button class="bgr-tooltip-close" id="bgr-tooltip-close" aria-label="Close">✕</button>
+        </div>
+      </div>
+
     </div>
 
-    <div id="status"></div>
+    <div id="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 
-  <div id="results"></div>
+  <!-- ── TOOLBAR ── -->
+  <div id="toolbar" role="toolbar" aria-label="Batch actions">
+    <button class="btn-toolbar" id="btn-clear">✕ Clear all</button>
+    <button class="btn-toolbar" id="btn-download-all">⬇ Download all as ZIP</button>
+  </div>
 
-  <canvas id="work-canvas" style="display:none"></canvas>
+  <!-- ── RESULTS ── -->
+  <div id="results" aria-live="polite" aria-label="Processed images"></div>
 
-  <script>
-    const dropZone   = document.getElementById('drop-zone');
-    const fileInput  = document.getElementById('file-input');
-    const results    = document.getElementById('results');
-    const status     = document.getElementById('status');
-    const workCanvas = document.getElementById('work-canvas');
-    const ctx        = workCanvas.getContext('2d', { willReadFrequently: true });
+  <canvas id="work-canvas" style="display:none" aria-hidden="true"></canvas>
 
+  <!-- JSZip for Download All -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <script type="module">
+    // ── @imgly/background-removal via CDN (ESM) ──
+    let bgRemove = null;
+    let bgrState = 'idle'; // 'idle' | 'loading' | 'ready' | 'error'
+
+    function setBgrState(state, errMsg) {
+      bgrState = state;
+      document.getElementById('bgr-state-idle').hidden    = state !== 'idle';
+      document.getElementById('bgr-state-loading').hidden = state !== 'loading';
+      document.getElementById('bgr-state-ready').hidden   = state !== 'ready';
+      document.getElementById('bgr-state-error').hidden   = state !== 'error';
+      if (state !== 'ready') document.getElementById('opt-bgremove').checked = false;
+      if (state === 'error' && errMsg)
+        document.getElementById('bgr-err-msg').textContent = errMsg;
+    }
+
+    async function loadBgRemoval() {
+      if (bgrState === 'ready')   return true;
+      if (bgrState === 'loading') return false;
+      setBgrState('loading');
+      try {
+        const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js');
+        bgRemove = mod.removeBackground;
+        setBgrState('ready');
+        return true;
+      } catch (e) {
+        setBgrState('error', 'Download failed — check your connection');
+        return false;
+      }
+    }
+
+    // ── DOM refs ──
+    const dropZone      = document.getElementById('drop-zone');
+    const fileInput     = document.getElementById('file-input');
+    const results       = document.getElementById('results');
+    const statusEl      = document.getElementById('status');
+    const workCanvas    = document.getElementById('work-canvas');
+    const ctx           = workCanvas.getContext('2d', { willReadFrequently: true });
+    const toolbar       = document.getElementById('toolbar');
+
+    // Options
+    const tabAlpha      = document.getElementById('tab-alpha');
+    const tabColor      = document.getElementById('tab-color');
+    const colorOpts     = document.getElementById('color-opts');
+    const trimColor     = document.getElementById('trim-color');
+    const trimTolerance = document.getElementById('trim-tolerance');
+    const tolVal        = document.getElementById('tol-val');
+    const optPadding    = document.getElementById('opt-padding');
+    const paddingSlider = document.getElementById('padding-slider');
+    const paddingNum    = document.getElementById('padding-num');
+    const padVal        = document.getElementById('pad-val');
+    const optBgRemove   = document.getElementById('opt-bgremove');
+
+    // ── State ──
+    let cropMode = 'alpha'; // 'alpha' | 'color'
+    const cardRegistry = []; // { outName, getBlobFn }
+
+    // ── Mode tabs ──
+    tabAlpha.addEventListener('click', () => setMode('alpha'));
+    tabColor.addEventListener('click', () => setMode('color'));
+
+    function setMode(mode) {
+      cropMode = mode;
+      tabAlpha.classList.toggle('active', mode === 'alpha');
+      tabColor.classList.toggle('active', mode === 'color');
+      tabAlpha.setAttribute('aria-pressed', mode === 'alpha');
+      tabColor.setAttribute('aria-pressed', mode === 'color');
+      colorOpts.classList.toggle('visible', mode === 'color');
+      colorOpts.setAttribute('aria-hidden', mode !== 'color');
+    }
+
+    // ── Tolerance display ──
+    trimTolerance.addEventListener('input', () => { tolVal.textContent = trimTolerance.value; });
+
+    // ── Padding controls ──
+    optPadding.addEventListener('change', () => {
+      const en = optPadding.checked;
+      paddingSlider.disabled = !en;
+      paddingNum.disabled = !en;
+    });
+
+    paddingSlider.addEventListener('input', () => {
+      paddingNum.value = paddingSlider.value;
+      padVal.textContent = paddingSlider.value;
+      refreshAllCards();
+    });
+
+    paddingNum.addEventListener('input', () => {
+      paddingSlider.value = Math.min(200, Math.max(0, paddingNum.value || 0));
+      padVal.textContent = paddingSlider.value;
+      refreshAllCards();
+    });
+
+    // ── Background removal buttons & tooltip ──
+    document.getElementById('btn-bgr-load').addEventListener('click', loadBgRemoval);
+    document.getElementById('btn-bgr-retry').addEventListener('click', loadBgRemoval);
+
+    const bgrTooltip = document.getElementById('bgr-tooltip');
+    document.getElementById('btn-bgr-info').addEventListener('click', (e) => {
+      e.stopPropagation();
+      bgrTooltip.hidden = !bgrTooltip.hidden;
+    });
+    document.getElementById('bgr-tooltip-close').addEventListener('click', () => {
+      bgrTooltip.hidden = true;
+    });
+    // Close tooltip on outside click
+    document.addEventListener('click', (e) => {
+      if (!bgrTooltip.hidden && !bgrTooltip.contains(e.target) &&
+          e.target.id !== 'btn-bgr-info') {
+        bgrTooltip.hidden = true;
+      }
+    });
+
+    // ── Drop zone ──
     dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+    });
     dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('dragleave', e => {
+      if (!dropZone.contains(e.relatedTarget)) dropZone.classList.remove('drag-over');
+    });
     dropZone.addEventListener('drop', e => {
       e.preventDefault();
       dropZone.classList.remove('drag-over');
       handleFiles(e.dataTransfer.files);
     });
-    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+    fileInput.addEventListener('change', () => { handleFiles(fileInput.files); fileInput.value = ''; });
 
-    function handleFiles(fileList) {
+    // ── Toolbar buttons ──
+    document.getElementById('btn-download-all').addEventListener('click', downloadAll);
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      results.innerHTML = '';
+      cardRegistry.length = 0;
+      toolbar.classList.remove('visible');
+      statusEl.textContent = '';
+    });
+
+    // ── File handling ──
+    async function handleFiles(fileList) {
       const files = [...fileList].filter(f => f.type === 'image/png' || f.type === 'image/webp');
-      if (!files.length) { status.textContent = 'No valid PNG or WebP files selected.'; return; }
-      status.textContent = `Processing ${files.length} file(s)…`;
-      Promise.all(files.map(processFile)).then(() => {
-        status.textContent = `Done — ${files.length} file(s) processed.`;
-      });
+      if (!files.length) { statusEl.textContent = 'No valid PNG or WebP files selected.'; return; }
+
+      // Guard: checkbox can only be checked when state === 'ready', so no lazy-load needed here
+
+      statusEl.textContent = `Processing ${files.length} file(s)…`;
+      const pad = getPadding();
+
+      const promises = files.map(f => processFile(f, pad));
+      await Promise.all(promises);
+      statusEl.textContent = `Done — ${files.length} file(s) processed.`;
+      toolbar.classList.add('visible');
     }
 
-    function processFile(file) {
-      return new Promise(resolve => {
-        const url = URL.createObjectURL(file);
-        const img = new Image();
-        img.onload = () => {
-          try {
-            const pad = getPadding();
-            const bounds = getContentBounds(img);
-            const card = createCard(file, img, bounds, pad);
-            results.prepend(card);
-          } catch (e) {
-            showError(file.name, e.message);
-          }
-          URL.revokeObjectURL(url);
-          resolve();
-        };
-        img.onerror = () => { showError(file.name, 'Failed to load image.'); resolve(); };
-        img.src = url;
-      });
+    async function processFile(file, pad) {
+      // Create a placeholder card immediately
+      const placeholderCard = createPlaceholderCard(file.name);
+      results.prepend(placeholderCard);
+
+      let imgSrc;  // We'll keep the object URL alive until we no longer need it
+
+      try {
+        // 1. Optionally remove background
+        let sourceBlob = file;
+        if (optBgRemove.checked && bgrState === 'ready') {
+          placeholderCard.querySelector('.card-processing').innerHTML =
+            '<span class="spinner"></span>Removing background…';
+          sourceBlob = await bgRemove(file, { output: { format: 'image/png' } });
+        }
+
+        // 2. Load image
+        imgSrc = URL.createObjectURL(sourceBlob);
+        const img = await loadImage(imgSrc);
+        img._mime = optBgRemove.checked ? 'image/png' : file.type;
+
+        // 3. Scan bounds (use pixel data already in work canvas)
+        placeholderCard.querySelector('.card-processing').innerHTML =
+          '<span class="spinner"></span>Scanning bounds…';
+        const bounds = getContentBounds(img);
+
+        // 4. Build card
+        const ext = img._mime === 'image/webp' ? 'webp' : 'png';
+        const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + ext;
+        const origUrl = URL.createObjectURL(file); // for original preview — revoked after img loads
+
+        const card = buildResultCard(file.name, img, bounds, pad, outName, origUrl);
+        placeholderCard.replaceWith(card);
+
+      } catch (e) {
+        placeholderCard.replaceWith(buildErrorCard(file.name, e.message));
+      } finally {
+        if (imgSrc) URL.revokeObjectURL(imgSrc);
+      }
     }
 
-    function getContentBounds(img) {
+    // ── Optimised getContentBounds ──
+    // Scans row-by-row (top→bottom, bottom→top) and col-by-col (left→right, right→left)
+    // instead of a single brute-force nested loop.
+    function getContentBounds(img, mode, color, tolerance) {
+      mode      = mode      ?? cropMode;
+      color     = color     ?? hexToRgb(trimColor.value);
+      tolerance = tolerance ?? Number(trimTolerance.value);
+
       workCanvas.width  = img.naturalWidth;
       workCanvas.height = img.naturalHeight;
       ctx.clearRect(0, 0, workCanvas.width, workCanvas.height);
       ctx.drawImage(img, 0, 0);
 
       const { data, width, height } = ctx.getImageData(0, 0, workCanvas.width, workCanvas.height);
-      let top = height, bottom = 0, left = width, right = 0;
 
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          if (data[(y * width + x) * 4 + 3] > 0) {
-            if (y < top)    top    = y;
-            if (y > bottom) bottom = y;
-            if (x < left)   left   = x;
-            if (x > right)  right  = x;
+      const isContent = mode === 'color'
+        ? (i) => {
+            if (data[i+3] === 0) return false;   // fully transparent — never content
+            const dr = data[i]   - color.r;
+            const dg = data[i+1] - color.g;
+            const db = data[i+2] - color.b;
+            return Math.sqrt(dr*dr + dg*dg + db*db) > tolerance;
           }
-        }
-      }
+        : (i) => data[i+3] > 0;                 // alpha mode: any non-transparent
 
-      if (top > bottom || left > right) return { top: 0, left: 0, bottom: height - 1, right: width - 1 };
+      // top
+      let top = -1;
+      outer: for (let y = 0; y < height; y++)
+        for (let x = 0; x < width; x++)
+          if (isContent((y * width + x) * 4)) { top = y; break outer; }
+
+      if (top === -1) return { top: 0, left: 0, bottom: height - 1, right: width - 1 };
+
+      // bottom
+      let bottom = top;
+      outer: for (let y = height - 1; y >= top; y--)
+        for (let x = 0; x < width; x++)
+          if (isContent((y * width + x) * 4)) { bottom = y; break outer; }
+
+      // left
+      let left = width;
+      for (let y = top; y <= bottom; y++)
+        for (let x = 0; x < left; x++)
+          if (isContent((y * width + x) * 4)) { left = x; break; }
+
+      // right
+      let right = left;
+      for (let y = top; y <= bottom; y++)
+        for (let x = width - 1; x > right; x--)
+          if (isContent((y * width + x) * 4)) { right = x; break; }
+
       return { top, left, bottom, right };
     }
 
+    // ── Render crop to off-screen canvas ──
     function renderCrop(img, bounds, pad) {
       const srcX = Math.max(0, bounds.left   - pad);
       const srcY = Math.max(0, bounds.top    - pad);
@@ -472,45 +1009,178 @@
       return { dataURL: out.toDataURL(img._mime), w, h, srcX, srcY };
     }
 
-    function createCard(file, img, bounds, pad) {
-      img._mime = file.type;
+    // ── Build result card ──
+    function buildResultCard(filename, img, bounds, pad, outName, origObjectUrl) {
       const { dataURL, w, h, srcX, srcY } = renderCrop(img, bounds, pad);
       const origW = img.naturalWidth, origH = img.naturalHeight;
-      const ext = file.type === 'image/webp' ? 'webp' : 'png';
-      const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + ext;
 
+      const card = document.createElement('div');
+      card.className = 'result-card';
+      card.dataset.outName = outName;
+
+      // Store live-refresh data on card
+      card._img    = img;
+      card._bounds = bounds;
+      card._mime   = img._mime;
+
+      card.innerHTML = `
+        <div class="result-header">
+          <span class="filename">${escHtml(filename)}</span>
+          <span class="meta">${origW}×${origH} &rarr; <span class="dim-out">${w}×${h}</span> &nbsp;|&nbsp; offset (<span class="off-x">${srcX}</span>, <span class="off-y">${srcY}</span>)</span>
+          <div class="card-actions">
+            <button class="btn-action btn-copy-img" title="Copy cropped image to clipboard">⎘ Copy image</button>
+            <button class="btn-action btn-copy-link" title="Copy a data: download link">⎘ Copy link</button>
+            <button class="btn-action primary btn-dl">↓ Download</button>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div class="preview-box"><span>Original</span><img class="img-orig" alt="Original" /></div>
+          <div class="preview-box"><span>Cropped</span><img class="img-crop" alt="Cropped" /></div>
+        </div>`;
+
+      // Set original preview, then revoke its URL after load
+      const origImg = card.querySelector('.img-orig');
+      origImg.src = origObjectUrl;
+      origImg.addEventListener('load', () => URL.revokeObjectURL(origObjectUrl), { once: true });
+
+      // Set cropped preview
+      const cropImg = card.querySelector('.img-crop');
+      cropImg.src = dataURL;
+
+      // Register for Download All
+      cardRegistry.push({
+        outName,
+        getDataURL: () => card.querySelector('.img-crop').src,
+      });
+
+      // Download
+      card.querySelector('.btn-dl').addEventListener('click', () => {
+        triggerDownload(card.querySelector('.img-crop').src, outName);
+      });
+
+      // Copy image
+      card.querySelector('.btn-copy-img').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        try {
+          const blob = await dataURLtoBlob(card.querySelector('.img-crop').src);
+          await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+          flashCopied(btn);
+        } catch {
+          btn.textContent = '✗ Not supported';
+          setTimeout(() => { btn.innerHTML = '⎘ Copy image'; }, 2000);
+        }
+      });
+
+      // Copy link
+      card.querySelector('.btn-copy-link').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        try {
+          await navigator.clipboard.writeText(card.querySelector('.img-crop').src);
+          flashCopied(btn);
+        } catch {
+          btn.textContent = '✗ Failed';
+          setTimeout(() => { btn.innerHTML = '⎘ Copy link'; }, 2000);
+        }
+      });
+
+      return card;
+    }
+
+    // ── Live padding refresh ──
+    function refreshAllCards() {
+      const pad = getPadding();
+      document.querySelectorAll('.result-card[data-out-name]').forEach(card => {
+        if (!card._img || !card._bounds) return;
+        const { dataURL, w, h, srcX, srcY } = renderCrop(card._img, card._bounds, pad);
+        card.querySelector('.img-crop').src = dataURL;
+        card.querySelector('.dim-out').textContent = `${w}×${h}`;
+        card.querySelector('.off-x').textContent = srcX;
+        card.querySelector('.off-y').textContent = srcY;
+      });
+    }
+
+    // ── Download All as ZIP ──
+    async function downloadAll() {
+      if (!cardRegistry.length) return;
+      const btn = document.getElementById('btn-download-all');
+      btn.textContent = '⏳ Zipping…';
+      btn.disabled = true;
+      try {
+        const zip = new JSZip();
+        for (const { outName, getDataURL } of cardRegistry) {
+          const dataURL = getDataURL();
+          const blob = await dataURLtoBlob(dataURL);
+          zip.file(outName, blob);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        triggerDownload(URL.createObjectURL(zipBlob), 'crop2bounds_results.zip');
+      } finally {
+        btn.textContent = '⬇ Download all as ZIP';
+        btn.disabled = false;
+      }
+    }
+
+    // ── Helpers ──
+    function createPlaceholderCard(filename) {
       const card = document.createElement('div');
       card.className = 'result-card';
       card.innerHTML = `
         <div class="result-header">
-          <span class="filename">${file.name}</span>
-          <span class="meta">${origW}×${origH} &rarr; ${w}×${h} &nbsp;|&nbsp; offset (${srcX}, ${srcY})</span>
-          <button class="btn-download">↓ Download</button>
+          <span class="filename">${escHtml(filename)}</span>
         </div>
-        <div class="preview-row">
-          <div class="preview-box"><span>Original</span><img src="${URL.createObjectURL(file)}" /></div>
-          <div class="preview-box"><span>Cropped</span><img src="${dataURL}" /></div>
-        </div>`;
-
-      card.querySelector('.btn-download').addEventListener('click', () => {
-        const a = document.createElement('a');
-        a.href = dataURL; a.download = outName; a.click();
-      });
+        <div class="card-processing"><span class="spinner"></span>Processing…</div>`;
       return card;
     }
 
-    function showError(name, msg) {
+    function buildErrorCard(name, msg) {
       const div = document.createElement('div');
       div.className = 'result-card';
-      div.innerHTML = `<div class="result-header"><span class="filename">${name}</span></div>
-                       <p class="error-msg">Error: ${msg}</p>`;
-      results.prepend(div);
+      div.innerHTML = `<div class="result-header"><span class="filename">${escHtml(name)}</span></div>
+                       <p class="error-msg">✗ ${escHtml(msg)}</p>`;
+      return div;
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = src;
+      });
     }
 
     function getPadding() {
-      if (!document.getElementById('opt-padding').checked) return 0;
-      return Math.max(0, parseInt(document.getElementById('padding-val').value, 10) || 0);
+      if (!optPadding.checked) return 0;
+      return Math.max(0, parseInt(paddingNum.value, 10) || 0);
     }
+
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return { r, g, b };
+    }
+
+    function triggerDownload(href, filename) {
+      const a = document.createElement('a');
+      a.href = href; a.download = filename; a.click();
+    }
+
+    function dataURLtoBlob(dataURL) {
+      return fetch(dataURL).then(r => r.blob());
+    }
+
+    function flashCopied(btn) {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    }
+
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
   </script>
 </body>
 </html>
