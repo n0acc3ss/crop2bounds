@@ -1,7 +1,7 @@
 # Crop2bounds
 
 ##### Live app → https://n0-acc3ss.github.io/crop2bounds/
-<img src="https://github.com/n0-acc3ss/crop2bounds/blob/main/crop2bounds.webp" width="500px">
+<img src="https://github.com/n0-acc3ss/crop2bounds/blob/main/crop2bounds.webp?raw=true" width="800px">
 
 
 > [!NOTE]
