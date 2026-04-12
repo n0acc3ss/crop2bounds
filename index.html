@@ -747,11 +747,13 @@
   <!-- JSZip for Download All -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-  <!-- Import map required by @imgly/background-removal -->
+  <!-- Import map: resolves bare "onnxruntime-web" specifier used inside @imgly/background-removal.
+       We force device:'cpu' so the webgpu subpath is never imported. -->
   <script type="importmap">
   {
     "imports": {
-      "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.web.js"
+      "onnxruntime-web":        "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.min.mjs",
+      "onnxruntime-web/webgpu": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.webgpu.bundle.min.mjs"
     }
   }
   </script>
@@ -778,10 +780,17 @@
       setBgrState('loading');
       try {
         const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/index.mjs');
-        bgRemove = mod.default ?? mod.removeBackground;
+        const fn = mod.default ?? mod.removeBackground;
+        // Wrap with fixed config: CPU only (avoids onnxruntime-web/webgpu import),
+        // model assets fetched from IMG.LY's CDN (default publicPath).
+        bgRemove = (blob) => fn(blob, {
+          device: 'cpu',
+          output: { format: 'image/png' }
+        });
         setBgrState('ready');
         return true;
       } catch (e) {
+        console.error('BGR load error:', e);
         setBgrState('error', 'Download failed — check your connection');
         return false;
       }
@@ -923,7 +932,7 @@
         if (optBgRemove.checked && bgrState === 'ready') {
           placeholderCard.querySelector('.card-processing').innerHTML =
             '<span class="spinner"></span>Removing background…';
-          sourceBlob = await bgRemove(file, { output: { format: 'image/png' } });
+          sourceBlob = await bgRemove(file);
         }
 
         // 2. Load image
