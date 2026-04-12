@@ -1,7 +1,11 @@
 # Crop2bounds
 
-Live app → https://n0-acc3ss.github.io/crop2bounds/
-A zero-dependency, single-file web app that crops PNG and WebP images to their content bounds on all 4 sides — no resolution change, no quality loss.
+##### Live app → https://n0-acc3ss.github.io/crop2bounds/
+<img src="https://github.com/n0-acc3ss/crop2bounds/blob/main/crop2bounds.webp" width="500px">
+
+
+> [!NOTE]
+> A zero-dependency, single-file web app that crops PNG and WebP images to their content bounds on all 4 sides — no resolution change, no quality loss.
 
 ## How it works
 
@@ -19,7 +23,7 @@ The app uses the browser's Canvas API to scan every pixel and find the outermost
 
 ## Usage
 
-1. Open the page [Crop2bounds](https://n0-acc3ss.github.io/crop2bounds/) or [`index.html`](https://github.com/n0-acc3ss/crop2bounds/blob/main/index.html) in any modern browser (no server required)
+1. Open the webpage [Crop2bounds](https://n0-acc3ss.github.io/crop2bounds/) or [`index.html`](https://github.com/n0-acc3ss/crop2bounds/blob/main/index.html) in any modern browser (no server required)
 2. Drop one or more `.png` or `.webp` files onto the drop zone, or click to browse
 3. Optionally check **Add padding** and enter a pixel value
 4. Click **Download** on any result to save the cropped file
