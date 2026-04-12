@@ -705,9 +705,9 @@
     <!-- Drop Zone -->
     <div id="drop-zone" role="button" tabindex="0" aria-label="Drop PNG or WebP images here, or press Enter to browse">
       <span class="drop-icon" aria-hidden="true">🖼️</span>
-      <p>Drop PNG or WebP files here, or click to browse</p>
-      <span class="drop-hint">PNG &amp; WebP · Multiple files supported</span>
-      <input type="file" id="file-input" accept=".png,.webp,image/png,image/webp" multiple />
+      <p>Drop images here, or click to browse</p>
+      <span class="drop-hint">PNG · WebP · JPG · GIF · BMP · TIFF · AVIF · Multiple files</span>
+      <input type="file" id="file-input" accept=".png,.webp,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,.avif,image/*" multiple />
     </div>
 
     <!-- Options Panel -->
@@ -740,6 +740,18 @@
         <input type="range" id="padding-slider" min="0" max="200" value="0" style="width:110px" disabled aria-label="Padding amount in pixels" />
         <span class="range-val" id="pad-val" aria-live="polite">0</span>
         <input type="number" id="padding-num" value="0" min="0" max="500" aria-label="Padding value" disabled />
+      </div>
+
+      <!-- Output format row -->
+      <div class="options-row">
+        <span class="opt-label">Output Format</span>
+        <div class="mode-tabs" role="group" aria-label="Output format">
+          <button class="mode-tab active" id="fmt-match"  aria-pressed="true" >Match input</button>
+          <button class="mode-tab"        id="fmt-png"    aria-pressed="false">PNG</button>
+          <button class="mode-tab"        id="fmt-webp"   aria-pressed="false">WebP</button>
+          <button class="mode-tab"        id="fmt-jpg"    aria-pressed="false">JPG</button>
+        </div>
+        <span style="font-size:0.75rem;color:#354055;" id="fmt-note"></span>
       </div>
 
       <!-- Background removal row -->
@@ -873,8 +885,9 @@
     const optBgRemove   = document.getElementById('opt-bgremove');
 
     // ── State ──
-    let cropMode = 'alpha'; // 'alpha' | 'color'
-    const cardRegistry = []; // { outName, getBlobFn }
+    let cropMode   = 'alpha'; // 'alpha' | 'color'
+    let outputFmt  = 'match'; // 'match' | 'png' | 'webp' | 'jpg'
+    const cardRegistry = []; // { outName, getDataURL }
 
     // ── Mode tabs ──
     tabAlpha.addEventListener('click', () => setMode('alpha'));
@@ -888,6 +901,53 @@
       tabColor.setAttribute('aria-pressed', mode === 'color');
       colorOpts.classList.toggle('visible', mode === 'color');
       colorOpts.setAttribute('aria-hidden', mode !== 'color');
+    }
+
+    // ── Output format tabs ──
+    const fmtButtons = {
+      match: document.getElementById('fmt-match'),
+      png:   document.getElementById('fmt-png'),
+      webp:  document.getElementById('fmt-webp'),
+      jpg:   document.getElementById('fmt-jpg'),
+    };
+    const fmtNote = document.getElementById('fmt-note');
+
+    function setOutputFmt(fmt) {
+      outputFmt = fmt;
+      Object.entries(fmtButtons).forEach(([k, btn]) => {
+        btn.classList.toggle('active', k === fmt);
+        btn.setAttribute('aria-pressed', k === fmt);
+      });
+      fmtNote.textContent = fmt === 'jpg'
+        ? '⚠ JPG has no transparency — background fills white'
+        : fmt === 'match'
+        ? 'JPG input → JPG out (white bg); PNG/WebP input → preserved'
+        : '';
+    }
+
+    Object.entries(fmtButtons).forEach(([k, btn]) =>
+      btn.addEventListener('click', () => setOutputFmt(k))
+    );
+
+    // Like resolveOutputFormat but enforces non-JPEG when transparency is needed
+    function resolveOutputMimeForCard(inputMime, needsTransparency) {
+      const { mime, ext } = resolveOutputFormat(inputMime);
+      if (needsTransparency && mime === 'image/jpeg') {
+        // Fall back to PNG to preserve transparency from BG removal
+        return { mime: 'image/png', ext: 'png' };
+      }
+      return { mime, ext };
+    }
+
+    // Returns { mime, ext } for a given input MIME, respecting outputFmt
+    function resolveOutputFormat(inputMime) {
+      if (outputFmt === 'png')  return { mime: 'image/png',  ext: 'png'  };
+      if (outputFmt === 'webp') return { mime: 'image/webp', ext: 'webp' };
+      if (outputFmt === 'jpg')  return { mime: 'image/jpeg', ext: 'jpg'  };
+      // 'match': keep input format, but anything that isn't png/webp/jpeg → png
+      if (inputMime === 'image/webp') return { mime: 'image/webp', ext: 'webp' };
+      if (inputMime === 'image/jpeg') return { mime: 'image/jpeg', ext: 'jpg'  };
+      return { mime: 'image/png', ext: 'png' };
     }
 
     // ── Tolerance display ──
@@ -959,8 +1019,8 @@
 
     // ── File handling ──
     async function handleFiles(fileList) {
-      const files = [...fileList].filter(f => f.type === 'image/png' || f.type === 'image/webp');
-      if (!files.length) { statusEl.textContent = 'No valid PNG or WebP files selected.'; return; }
+      const files = [...fileList].filter(f => f.type.startsWith('image/'));
+      if (!files.length) { statusEl.textContent = 'No valid image files selected.'; return; }
 
       // Guard: checkbox can only be checked when state === 'ready', so no lazy-load needed here
 
@@ -992,8 +1052,13 @@
         // 2. Load image
         imgSrc = URL.createObjectURL(sourceBlob);
         const img = await loadImage(imgSrc);
-        img._mime   = optBgRemove.checked ? 'image/png' : file.type;
-        img._hasBgr = optBgRemove.checked && bgrState === 'ready';
+        // If BG was removed the source is always PNG (transparent); output format still respected
+        const bgrApplied = optBgRemove.checked && bgrState === 'ready';
+        img._hasBgr  = bgrApplied;
+        // Resolve output mime/ext: BG-removed images force non-JPEG output (transparency needed)
+        const { mime, ext } = resolveOutputMimeForCard(file.type, bgrApplied);
+        img._mime = mime;
+        img._ext  = ext;
 
         // 3. Scan bounds
         placeholderCard.querySelector('.card-processing').innerHTML =
@@ -1001,8 +1066,7 @@
         const bounds = getContentBounds(img);
 
         // 4. Build card
-        const ext = img._mime === 'image/webp' ? 'webp' : 'png';
-        const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + ext;
+        const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + img._ext;
         const origUrl = URL.createObjectURL(file); // for original preview — revoked after img loads
 
         const card = buildResultCard(file.name, img, bounds, pad, outName, origUrl, file);
@@ -1080,7 +1144,15 @@
 
       const out = document.createElement('canvas');
       out.width = w; out.height = h;
-      out.getContext('2d').drawImage(img, srcX, srcY, w, h, 0, 0, w, h);
+      const octx = out.getContext('2d');
+
+      // JPEG has no alpha channel — fill white so transparent areas don't go black
+      if (img._mime === 'image/jpeg') {
+        octx.fillStyle = '#ffffff';
+        octx.fillRect(0, 0, w, h);
+      }
+
+      octx.drawImage(img, srcX, srcY, w, h, 0, 0, w, h);
       return { dataURL: out.toDataURL(img._mime), w, h, srcX, srcY };
     }
 
@@ -1088,7 +1160,6 @@
     function buildResultCard(filename, img, bounds, pad, outName, origObjectUrl, origFile) {
       const { dataURL, w, h, srcX, srcY } = renderCrop(img, bounds, pad);
       const origW = img.naturalWidth, origH = img.naturalHeight;
-      const ext = img._mime === 'image/webp' ? 'webp' : 'png';
 
       const card = document.createElement('div');
       card.className = 'result-card';
@@ -1205,11 +1276,14 @@
           const sourceBlob = await bgRemove(card._origFile);
           newImgSrc = URL.createObjectURL(sourceBlob);
           const newImg = await loadImage(newImgSrc);
-          newImg._mime   = 'image/png';
           newImg._hasBgr = true;
-          card._img      = newImg;
-          card._mime     = 'image/png';
-          card._hasBgr   = true;
+          // BG removal always needs transparency — resolve format, forcing non-JPEG
+          const { mime: newMime, ext: newExt } = resolveOutputMimeForCard(card._origFile.type, true);
+          newImg._mime = newMime;
+          newImg._ext  = newExt;
+          card._img    = newImg;
+          card._mime   = newMime;
+          card._hasBgr = true;
           // Re-scan bounds after bg removal using per-card trim settings
           const color  = hexToRgb(card.querySelector('.card-trim-color').value);
           const tol    = Number(card.querySelector('.card-trim-tol').value);
