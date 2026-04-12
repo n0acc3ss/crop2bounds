@@ -377,7 +377,61 @@
       color: #06101a;
     }
     .btn-action.primary:hover { background: #45cefc; border-color: #45cefc; }
-    .btn-action.copied { background: #1e3a2a; border-color: #2a7a4a; color: #4adf8a; }
+    .btn-action.copied  { background: #1e3a2a; border-color: #2a7a4a; color: #4adf8a; }
+    .btn-action.danger  { border-color: #3a2020; color: #7a4444; }
+    .btn-action.danger:hover { border-color: #e05555; color: #e05555; }
+    .btn-action.running { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
+    /* ── Per-card reprocess panel ── */
+    .reprocess-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.6rem 1.1rem;
+      background: #111520;
+      border-top: 1px solid #1e2435;
+      flex-wrap: wrap;
+    }
+
+    .reprocess-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #354055;
+      margin-right: 0.2rem;
+    }
+
+    .reprocess-sep {
+      width: 1px;
+      height: 18px;
+      background: #1e2435;
+      margin: 0 0.2rem;
+    }
+
+    /* Per-card color picker + tolerance */
+    .card-color-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-color-wrap label {
+      font-size: 0.78rem;
+      color: #4a5468;
+      gap: 0.3rem;
+    }
+
+    .card-tol-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      color: #4a5468;
+    }
+
+    .card-tol-wrap input[type=range] { width: 70px; }
+    .card-tol-val { font-size: 0.78rem; color: #29c2f5; min-width: 1.8em; }
 
     .preview-row {
       display: grid;
@@ -938,9 +992,10 @@
         // 2. Load image
         imgSrc = URL.createObjectURL(sourceBlob);
         const img = await loadImage(imgSrc);
-        img._mime = optBgRemove.checked ? 'image/png' : file.type;
+        img._mime   = optBgRemove.checked ? 'image/png' : file.type;
+        img._hasBgr = optBgRemove.checked && bgrState === 'ready';
 
-        // 3. Scan bounds (use pixel data already in work canvas)
+        // 3. Scan bounds
         placeholderCard.querySelector('.card-processing').innerHTML =
           '<span class="spinner"></span>Scanning bounds…';
         const bounds = getContentBounds(img);
@@ -950,7 +1005,7 @@
         const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + ext;
         const origUrl = URL.createObjectURL(file); // for original preview — revoked after img loads
 
-        const card = buildResultCard(file.name, img, bounds, pad, outName, origUrl);
+        const card = buildResultCard(file.name, img, bounds, pad, outName, origUrl, file);
         placeholderCard.replaceWith(card);
 
       } catch (e) {
@@ -1030,18 +1085,26 @@
     }
 
     // ── Build result card ──
-    function buildResultCard(filename, img, bounds, pad, outName, origObjectUrl) {
+    function buildResultCard(filename, img, bounds, pad, outName, origObjectUrl, origFile) {
       const { dataURL, w, h, srcX, srcY } = renderCrop(img, bounds, pad);
       const origW = img.naturalWidth, origH = img.naturalHeight;
+      const ext = img._mime === 'image/webp' ? 'webp' : 'png';
 
       const card = document.createElement('div');
       card.className = 'result-card';
       card.dataset.outName = outName;
 
-      // Store live-refresh data on card
-      card._img    = img;
-      card._bounds = bounds;
-      card._mime   = img._mime;
+      // Per-card state — preserved for re-processing
+      card._origFile   = origFile;   // original File, always kept for re-runs
+      card._img        = img;        // current source image (may be bg-removed)
+      card._bounds     = bounds;
+      card._mime       = img._mime;
+      card._hasBgr     = img._hasBgr ?? false; // whether bg was already removed
+
+      // Snapshot the global trim settings at time of processing for per-card defaults
+      card._trimMode  = cropMode;
+      card._trimColor = trimColor.value;
+      card._trimTol   = Number(trimTolerance.value);
 
       card.innerHTML = `
         <div class="result-header">
@@ -1049,23 +1112,45 @@
           <span class="meta">${origW}×${origH} &rarr; <span class="dim-out">${w}×${h}</span> &nbsp;|&nbsp; offset (<span class="off-x">${srcX}</span>, <span class="off-y">${srcY}</span>)</span>
           <div class="card-actions">
             <button class="btn-action btn-copy-img" title="Copy cropped image to clipboard">⎘ Copy image</button>
-            <button class="btn-action btn-copy-link" title="Copy a data: download link">⎘ Copy link</button>
             <button class="btn-action primary btn-dl">↓ Download</button>
           </div>
         </div>
         <div class="preview-row">
           <div class="preview-box"><span>Original</span><img class="img-orig" alt="Original" /></div>
           <div class="preview-box"><span>Cropped</span><img class="img-crop" alt="Cropped" /></div>
+        </div>
+        <div class="reprocess-bar">
+          <span class="reprocess-label">Re-process</span>
+
+          <button class="btn-action btn-card-trim" title="Re-trim with current settings">✂ Trim</button>
+
+          <div class="card-color-wrap">
+            <label>Color <input type="color" class="card-trim-color" value="${escHtml(cropMode === 'color' ? trimColor.value : '#ffffff')}" title="Background color to trim" /></label>
+          </div>
+          <div class="card-tol-wrap">
+            Tol <input type="range" class="card-trim-tol" min="0" max="128" value="${card._trimTol}" />
+            <span class="card-tol-val">${card._trimTol}</span>
+          </div>
+
+          <div class="reprocess-sep"></div>
+
+          <button class="btn-action btn-card-bgr" title="Remove background using AI model" ${bgrState !== 'ready' ? 'disabled' : ''}>
+            ${bgrState === 'ready' ? '✦ Remove BG' : '✦ Remove BG (load model first)'}
+          </button>
         </div>`;
 
-      // Set original preview, then revoke its URL after load
+      // Set original preview — revoke object URL after load
       const origImg = card.querySelector('.img-orig');
       origImg.src = origObjectUrl;
       origImg.addEventListener('load', () => URL.revokeObjectURL(origObjectUrl), { once: true });
 
       // Set cropped preview
-      const cropImg = card.querySelector('.img-crop');
-      cropImg.src = dataURL;
+      card.querySelector('.img-crop').src = dataURL;
+
+      // Wire tolerance display
+      const tolSlider = card.querySelector('.card-trim-tol');
+      const tolDisplay = card.querySelector('.card-tol-val');
+      tolSlider.addEventListener('input', () => { tolDisplay.textContent = tolSlider.value; });
 
       // Register for Download All
       cardRegistry.push({
@@ -1073,49 +1158,92 @@
         getDataURL: () => card.querySelector('.img-crop').src,
       });
 
-      // Download
+      // ── Download ──
       card.querySelector('.btn-dl').addEventListener('click', () => {
         triggerDownload(card.querySelector('.img-crop').src, outName);
       });
 
-      // Copy image
+      // ── Copy image ──
       card.querySelector('.btn-copy-img').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
         try {
           const blob = await dataURLtoBlob(card.querySelector('.img-crop').src);
           await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
-          flashCopied(btn);
+          flashCopied(btn, '⎘ Copy image');
         } catch {
           btn.textContent = '✗ Not supported';
           setTimeout(() => { btn.innerHTML = '⎘ Copy image'; }, 2000);
         }
       });
 
-      // Copy link
-      card.querySelector('.btn-copy-link').addEventListener('click', async (e) => {
+      // ── Re-trim ──
+      card.querySelector('.btn-card-trim').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
+        btn.classList.add('running');
+        btn.textContent = '…';
         try {
-          await navigator.clipboard.writeText(card.querySelector('.img-crop').src);
-          flashCopied(btn);
-        } catch {
-          btn.textContent = '✗ Failed';
-          setTimeout(() => { btn.innerHTML = '⎘ Copy link'; }, 2000);
+          const color     = hexToRgb(card.querySelector('.card-trim-color').value);
+          const tol       = Number(card.querySelector('.card-trim-tol').value);
+          // Per-card trim always uses color mode (picker is explicit)
+          const newBounds = getContentBounds(card._img, 'color', color, tol);
+          card._bounds    = newBounds;
+          updateCardCrop(card);
+        } finally {
+          btn.classList.remove('running');
+          btn.textContent = '✂ Trim';
         }
+      });
+
+      // ── Remove BG ──
+      card.querySelector('.btn-card-bgr').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        if (bgrState !== 'ready') return;
+        btn.classList.add('running');
+        btn.textContent = '…removing…';
+        let newImgSrc;
+        try {
+          const sourceBlob = await bgRemove(card._origFile);
+          newImgSrc = URL.createObjectURL(sourceBlob);
+          const newImg = await loadImage(newImgSrc);
+          newImg._mime   = 'image/png';
+          newImg._hasBgr = true;
+          card._img      = newImg;
+          card._mime     = 'image/png';
+          card._hasBgr   = true;
+          // Re-scan bounds after bg removal using per-card trim settings
+          const color  = hexToRgb(card.querySelector('.card-trim-color').value);
+          const tol    = Number(card.querySelector('.card-trim-tol').value);
+          card._bounds = getContentBounds(newImg, 'color', color, tol);
+          updateCardCrop(card);
+        } catch (err) {
+          btn.textContent = '✗ Failed';
+          setTimeout(() => { btn.textContent = '✦ Remove BG'; btn.classList.remove('running'); }, 2000);
+          return;
+        } finally {
+          if (newImgSrc) URL.revokeObjectURL(newImgSrc);
+        }
+        btn.classList.remove('running');
+        btn.textContent = '✦ Remove BG';
       });
 
       return card;
     }
 
+    // ── Update a card's cropped output in-place ──
+    function updateCardCrop(card) {
+      const pad = getPadding();
+      const { dataURL, w, h, srcX, srcY } = renderCrop(card._img, card._bounds, pad);
+      card.querySelector('.img-crop').src = dataURL;
+      card.querySelector('.dim-out').textContent = `${w}×${h}`;
+      card.querySelector('.off-x').textContent = srcX;
+      card.querySelector('.off-y').textContent = srcY;
+    }
+
     // ── Live padding refresh ──
     function refreshAllCards() {
-      const pad = getPadding();
       document.querySelectorAll('.result-card[data-out-name]').forEach(card => {
         if (!card._img || !card._bounds) return;
-        const { dataURL, w, h, srcX, srcY } = renderCrop(card._img, card._bounds, pad);
-        card.querySelector('.img-crop').src = dataURL;
-        card.querySelector('.dim-out').textContent = `${w}×${h}`;
-        card.querySelector('.off-x').textContent = srcX;
-        card.querySelector('.off-y').textContent = srcY;
+        updateCardCrop(card);
       });
     }
 
@@ -1190,8 +1318,8 @@
       return fetch(dataURL).then(r => r.blob());
     }
 
-    function flashCopied(btn) {
-      const orig = btn.innerHTML;
+    function flashCopied(btn, origLabel) {
+      const orig = origLabel ?? btn.innerHTML;
       btn.innerHTML = '✓ Copied!';
       btn.classList.add('copied');
       setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
