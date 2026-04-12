@@ -5,7 +5,7 @@
 
 
 > [!NOTE]
-> A zero-dependency, single-file web app that crops PNG and WebP images to their content bounds on all 4 sides — no resolution change, no quality loss.
+> A zero-dependency, single-file web app that crops PNG and WebP images to their content bounds on all 4 sides<br>— no resolution change, no quality loss.
 
 ## How it works
 
