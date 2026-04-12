@@ -461,6 +461,8 @@
       gap: 0.55rem;
     }
 
+    .bgr-state[hidden] { display: none; }
+
     .bgr-msg {
       font-size: 0.82rem;
       color: #5a6478;
@@ -745,6 +747,15 @@
   <!-- JSZip for Download All -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
+  <!-- Import map required by @imgly/background-removal -->
+  <script type="importmap">
+  {
+    "imports": {
+      "onnxruntime-web": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.web.js"
+    }
+  }
+  </script>
+
   <script type="module">
     // ── @imgly/background-removal via CDN (ESM) ──
     let bgRemove = null;
@@ -766,8 +777,8 @@
       if (bgrState === 'loading') return false;
       setBgrState('loading');
       try {
-        const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/browser/index.js');
-        bgRemove = mod.removeBackground;
+        const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/index.mjs');
+        bgRemove = mod.default ?? mod.removeBackground;
         setBgrState('ready');
         return true;
       } catch (e) {
