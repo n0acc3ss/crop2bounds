@@ -83,6 +83,21 @@
       line-height: 1.8;
     }
 
+    .c2b-version {
+      display: inline-block;
+      margin-top: 0.85rem;
+      font-size: 0.68rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #2a3448;
+      border: 1px solid #1e2a3a;
+      border-radius: 5px;
+      padding: 0.18em 0.6em;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
     /* ── TOOL SECTION ── */
     .tool-wrap {
       width: 100%;
@@ -219,10 +234,11 @@
       text-align: right;
     }
 
-    /* Mode tabs */
+    /* ── Mode tabs ── */
     .mode-tabs {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
     }
 
     .mode-tab {
@@ -250,7 +266,25 @@
       color: #9aa4ba;
     }
 
-    /* color-mode extra controls */
+    /* Secondary tab — for Color trim (advanced use) */
+    .mode-tab.secondary {
+      font-size: 0.74rem;
+      padding: 0.25rem 0.7rem;
+      border-style: dashed;
+      color: #404858;
+    }
+    .mode-tab.secondary.active {
+      background: #1e3a50;
+      border-color: #29c2f5;
+      border-style: solid;
+      color: #29c2f5;
+    }
+    .mode-tab.secondary:hover:not(.active) {
+      border-color: #3d5080;
+      color: #7a8494;
+    }
+
+    /* Color-mode extra controls */
     #color-opts {
       display: none;
       align-items: center;
@@ -259,12 +293,146 @@
     }
     #color-opts.visible { display: flex; }
 
-    /* bg-remove status */
-    #bgr-status {
-      font-size: 0.78rem;
-      color: #4a5468;
-      letter-spacing: 0.04em;
+    /* ── BGR controls ── */
+    .opt-label-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #1a55b8, #29c2f5);
+      color: #fff;
+      border-radius: 4px;
+      padding: 0.05em 0.4em;
+      vertical-align: middle;
+      margin-left: 0.3em;
+      position: relative;
+      top: -1px;
     }
+
+    .bgr-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .bgr-state {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+    .bgr-state[hidden] { display: none; }
+
+    .bgr-msg {
+      font-size: 0.82rem;
+      color: #5a6478;
+      letter-spacing: 0.03em;
+    }
+
+    .bgr-ready-dot { color: #4adf8a; font-size: 0.7rem; }
+    .bgr-err-dot   { color: #e05555; font-size: 0.82rem; }
+
+    /* Progress bar (shown during model download) */
+    .bgr-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .bgr-progress-track {
+      width: 100px;
+      height: 4px;
+      background: #1e2435;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .bgr-progress-bar {
+      height: 100%;
+      background: #29c2f5;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+    .bgr-progress-text {
+      font-size: 0.75rem;
+      color: #4a5468;
+      min-width: 88px;
+      letter-spacing: 0.03em;
+    }
+
+    /* Load / retry button */
+    .btn-bgr-load {
+      background: #1a1e28;
+      border: 1px solid #2e3545;
+      border-radius: 7px;
+      color: #9aa4ba;
+      font-size: 0.8rem;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.35rem 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-bgr-load:hover { border-color: #29c2f5; color: #29c2f5; }
+
+    /* ℹ button */
+    .btn-bgr-info {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1px solid #2e3545;
+      background: #1a1e28;
+      color: #4a5468;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-bgr-info:hover { border-color: #29c2f5; color: #29c2f5; }
+
+    /* Tooltip */
+    .bgr-tooltip {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      z-index: 100;
+      width: min(360px, 90vw);
+      background: #1a1e2e;
+      border: 1px solid #2e3a55;
+      border-radius: 10px;
+      padding: 1rem 1rem 0.85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+      font-size: 0.82rem;
+      color: #8a94a8;
+      line-height: 1.6;
+    }
+
+    .bgr-tooltip strong {
+      display: block;
+      color: #c8d0e0;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .bgr-tooltip p + p { margin-top: 0.5rem; }
+
+    .bgr-tooltip-close {
+      position: absolute;
+      top: 0.55rem; right: 0.65rem;
+      background: none;
+      border: none;
+      color: #4a5468;
+      cursor: pointer;
+      font-size: 0.78rem;
+      line-height: 1;
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+    .bgr-tooltip-close:hover { color: #9aa4ba; }
 
     /* global status */
     #status {
@@ -334,12 +502,27 @@
       flex-wrap: wrap;
     }
 
+    .filename-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
     .result-header .filename {
       font-size: 0.83rem;
       color: #9aa4ba;
       word-break: break-all;
-      flex: 1 1 auto;
     }
+
+    /* Output filename — updates live when format changes */
+    .out-name {
+      font-size: 0.72rem;
+      color: #354055;
+      word-break: break-all;
+    }
+    .out-name .out-arrow { color: #2a3448; margin-right: 0.2em; }
 
     .result-header .meta {
       font-size: 0.76rem;
@@ -381,6 +564,7 @@
     .btn-action.danger  { border-color: #3a2020; color: #7a4444; }
     .btn-action.danger:hover { border-color: #e05555; color: #e05555; }
     .btn-action.running { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+    .btn-action:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
     /* ── Per-card reprocess panel ── */
     .reprocess-bar {
@@ -485,131 +669,6 @@
       padding: 1rem;
     }
 
-    /* ── BGR controls ── */
-    .opt-label-badge {
-      display: inline-block;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      background: linear-gradient(135deg, #1a55b8, #29c2f5);
-      color: #fff;
-      border-radius: 4px;
-      padding: 0.05em 0.4em;
-      vertical-align: middle;
-      margin-left: 0.3em;
-      position: relative;
-      top: -1px;
-    }
-
-    .bgr-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      position: relative;
-      flex-wrap: wrap;
-    }
-
-    .bgr-state {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-    }
-
-    .bgr-state[hidden] { display: none; }
-
-    .bgr-msg {
-      font-size: 0.82rem;
-      color: #5a6478;
-      letter-spacing: 0.03em;
-    }
-
-    .bgr-ready-dot { color: #4adf8a; font-size: 0.7rem; }
-    .bgr-err-dot   { color: #e05555; font-size: 0.82rem; }
-
-    .bgr-toggle-label {
-      font-size: 0.85rem;
-      color: #7a8494;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    /* Load / retry button */
-    .btn-bgr-load {
-      background: #1a1e28;
-      border: 1px solid #2e3545;
-      border-radius: 7px;
-      color: #9aa4ba;
-      font-size: 0.8rem;
-      font-family: 'Barlow', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 0.35rem 0.85rem;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-bgr-load:hover { border-color: #29c2f5; color: #29c2f5; }
-
-    /* ℹ button */
-    .btn-bgr-info {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 1px solid #2e3545;
-      background: #1a1e28;
-      color: #4a5468;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-    .btn-bgr-info:hover { border-color: #29c2f5; color: #29c2f5; }
-
-    /* Tooltip */
-    .bgr-tooltip {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
-      z-index: 100;
-      width: min(340px, 90vw);
-      background: #1a1e2e;
-      border: 1px solid #2e3a55;
-      border-radius: 10px;
-      padding: 1rem 1rem 0.85rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
-      font-size: 0.82rem;
-      color: #8a94a8;
-      line-height: 1.6;
-    }
-
-    .bgr-tooltip strong {
-      display: block;
-      color: #c8d0e0;
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .bgr-tooltip p + p { margin-top: 0.5rem; }
-
-    .bgr-tooltip-close {
-      position: absolute;
-      top: 0.55rem; right: 0.65rem;
-      background: none;
-      border: none;
-      color: #4a5468;
-      cursor: pointer;
-      font-size: 0.78rem;
-      line-height: 1;
-      padding: 0.1rem 0.3rem;
-      border-radius: 4px;
-      transition: color 0.15s;
-    }
-    .bgr-tooltip-close:hover { color: #9aa4ba; }
-
     /* spinner */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner {
@@ -697,6 +756,7 @@
       Free, Simple, Private. Your files stay on your device.<br>
       Works directly in your browser.
     </p>
+    <span class="c2b-version">v1.1</span>
   </header>
 
   <!-- ── TOOL ── -->
@@ -718,9 +778,9 @@
         <span class="opt-label">Crop Mode</span>
         <div class="mode-tabs" role="group" aria-label="Crop mode">
           <button class="mode-tab active" id="tab-alpha" aria-pressed="true">Transparency</button>
-          <button class="mode-tab" id="tab-color" aria-pressed="false">Color trim</button>
+          <button class="mode-tab secondary" id="tab-color" aria-pressed="false" title="Trim a specific background colour — useful when image has no alpha channel">Color trim</button>
         </div>
-        <!-- Color mode extras (shown when color tab active) -->
+        <!-- Color-mode extras (shown when color tab active) -->
         <div id="color-opts" aria-hidden="true">
           <label for="trim-color">Color</label>
           <input type="color" id="trim-color" value="#ffffff" title="Background color to trim" />
@@ -758,38 +818,44 @@
       <div class="options-row" id="bgr-row">
         <span class="opt-label">Background Removal <span class="opt-label-badge">AI</span></span>
         <div class="bgr-controls">
-          <!-- State: not loaded -->
+
+          <!-- State: idle (not loaded) -->
           <div id="bgr-state-idle" class="bgr-state">
             <button class="btn-bgr-load" id="btn-bgr-load">⬇ Load model</button>
             <button class="btn-bgr-info" id="btn-bgr-info" aria-label="What is this?" title="What is this?">ℹ</button>
           </div>
+
           <!-- State: loading -->
           <div id="bgr-state-loading" class="bgr-state" hidden>
             <span class="spinner"></span>
-            <span class="bgr-msg">Downloading AI model… <span id="bgr-progress"></span></span>
+            <span class="bgr-msg" id="bgr-loading-msg">Connecting…</span>
+            <div class="bgr-progress-wrap">
+              <div class="bgr-progress-track">
+                <div class="bgr-progress-bar" id="bgr-progress-bar"></div>
+              </div>
+              <span class="bgr-progress-text" id="bgr-progress-text"></span>
+            </div>
           </div>
-          <!-- State: ready -->
+
+          <!-- State: ready — no global toggle; BG removal is per-card -->
           <div id="bgr-state-ready" class="bgr-state" hidden>
             <span class="bgr-ready-dot" aria-hidden="true">●</span>
-            <span class="bgr-msg">Model ready</span>
-            <label class="bgr-toggle-label" for="opt-bgremove">
-              <input type="checkbox" id="opt-bgremove" />
-              Apply on next drop
-            </label>
+            <span class="bgr-msg">Model ready — use <strong style="color:#29c2f5">✦ Remove BG</strong> on any card</span>
           </div>
+
           <!-- State: error -->
           <div id="bgr-state-error" class="bgr-state" hidden>
             <span class="bgr-err-dot" aria-hidden="true">✕</span>
             <span class="bgr-msg" id="bgr-err-msg">Failed to load</span>
-            <button class="btn-bgr-load btn-bgr-retry" id="btn-bgr-retry">Retry</button>
+            <button class="btn-bgr-load" id="btn-bgr-retry">Retry</button>
           </div>
         </div>
 
         <!-- Info tooltip -->
         <div id="bgr-tooltip" class="bgr-tooltip" role="tooltip" hidden>
           <strong>AI Background Removal</strong>
-          <p>Uses the <em>RMBG-1.4</em> model (~40&nbsp;MB, downloaded once and cached by your browser) to erase image backgrounds before cropping. Processing happens entirely on your device — nothing is uploaded anywhere.</p>
-          <p>Best for subjects with a clear foreground (people, objects, logos). Works on PNG &amp; WebP.</p>
+          <p>Uses the <em>RMBG-1.4</em> model via <code style="font-size:0.78rem;color:#7a9ec8">@imgly/background-removal@1.7.0</code> (~40&nbsp;MB, downloaded once and cached by your browser). Processing is entirely on-device — nothing is uploaded anywhere.</p>
+          <p>Trigger it per-image with the <strong>✦ Remove BG</strong> button on each card. Best for subjects with a clear foreground (people, objects, logos).</p>
           <button class="bgr-tooltip-close" id="bgr-tooltip-close" aria-label="Close">✕</button>
         </div>
       </div>
@@ -813,8 +879,7 @@
   <!-- JSZip for Download All -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-  <!-- Import map: resolves bare "onnxruntime-web" specifier used inside @imgly/background-removal.
-       We force device:'cpu' so the webgpu subpath is never imported. -->
+  <!-- Import map: resolves bare "onnxruntime-web" specifier used inside @imgly/background-removal. -->
   <script type="importmap">
   {
     "imports": {
@@ -825,9 +890,163 @@
   </script>
 
   <script type="module">
-    // ── @imgly/background-removal via CDN (ESM) ──
-    let bgRemove = null;
-    let bgrState = 'idle'; // 'idle' | 'loading' | 'ready' | 'error'
+
+    // ═══════════════════════════════════════════════════════════════
+    // 1. INLINE WEB WORKER — pixel scanning off the main thread
+    // ═══════════════════════════════════════════════════════════════
+    // Uses OffscreenCanvas + transferred ImageBitmap so pixel scanning
+    // never touches the main thread. Falls back to main-thread canvas
+    // if OffscreenCanvas is unavailable (older Safari).
+
+    const BOUNDS_WORKER_SRC = `
+      self.onmessage = function({ data }) {
+        var id = data.id, bitmap = data.bitmap,
+            mode = data.mode, color = data.color, tol = data.tolerance;
+        var w = bitmap.width, h = bitmap.height;
+        var canvas = new OffscreenCanvas(w, h);
+        var ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(bitmap, 0, 0);
+        bitmap.close();
+        var d = ctx.getImageData(0, 0, w, h).data;
+        var tol2 = tol * tol; // compare squared distance, avoids sqrt in hot loop
+
+        function isContent(i) {
+          if (d[i+3] === 0) return false;
+          if (mode !== 'color') return true;
+          var dr = d[i]-color.r, dg = d[i+1]-color.g, db = d[i+2]-color.b;
+          return (dr*dr + dg*dg + db*db) > tol2;
+        }
+
+        var top = -1;
+        tl: for (var y = 0; y < h; y++)
+          for (var x = 0; x < w; x++)
+            if (isContent((y*w+x)*4)) { top = y; break tl; }
+
+        if (top === -1) {
+          self.postMessage({ id: id, bounds: { top:0, left:0, bottom:h-1, right:w-1 } });
+          return;
+        }
+
+        var bottom = top;
+        bl: for (var y = h-1; y >= top; y--)
+          for (var x = 0; x < w; x++)
+            if (isContent((y*w+x)*4)) { bottom = y; break bl; }
+
+        var left = w;
+        for (var y = top; y <= bottom; y++)
+          for (var x = 0; x < left; x++)
+            if (isContent((y*w+x)*4)) { left = x; break; }
+
+        var right = left;
+        for (var y = top; y <= bottom; y++)
+          for (var x = w-1; x > right; x--)
+            if (isContent((y*w+x)*4)) { right = x; break; }
+
+        self.postMessage({ id: id, bounds: { top:top, left:left, bottom:bottom, right:right } });
+      };
+    `;
+
+    const CAN_USE_WORKER = typeof OffscreenCanvas !== 'undefined';
+    let   boundsWorker   = null;
+    const workerPending  = new Map(); // id → resolve
+
+    function ensureBoundsWorker() {
+      if (boundsWorker) return boundsWorker;
+      const blob = new Blob([BOUNDS_WORKER_SRC], { type: 'text/javascript' });
+      boundsWorker = new Worker(URL.createObjectURL(blob));
+      boundsWorker.onmessage = ({ data: { id, bounds } }) => {
+        const cb = workerPending.get(id);
+        if (cb) { workerPending.delete(id); cb(bounds); }
+      };
+      boundsWorker.onerror = () => {
+        // On error reject all pending and discard the worker so it can be recreated
+        for (const cb of workerPending.values()) cb(null);
+        workerPending.clear();
+        boundsWorker = null;
+      };
+      return boundsWorker;
+    }
+
+    // Scan content bounds — worker path preferred, main-thread fallback.
+    // `img` must be a loaded HTMLImageElement (or any createImageBitmap-compatible source).
+    async function scanBounds(img, mode, color, tolerance) {
+      if (CAN_USE_WORKER) {
+        try {
+          const bitmap = await createImageBitmap(img);
+          const bounds = await new Promise((resolve, reject) => {
+            const id      = crypto.randomUUID();
+            const timeout = setTimeout(() => {
+              workerPending.delete(id);
+              reject(new Error('Worker timeout'));
+            }, 15_000);
+            workerPending.set(id, (b) => {
+              clearTimeout(timeout);
+              b === null ? reject(new Error('Worker error')) : resolve(b);
+            });
+            ensureBoundsWorker().postMessage({ id, bitmap, mode, color, tolerance }, [bitmap]);
+          });
+          return bounds;
+        } catch (e) {
+          console.warn('Bounds worker failed, falling back to main thread:', e);
+        }
+      }
+      return scanBoundsMain(img, mode, color, tolerance);
+    }
+
+    // Main-thread fallback (uses the shared work-canvas).
+    function scanBoundsMain(img, mode, color, tolerance) {
+      const w = img.naturalWidth, h = img.naturalHeight;
+      workCanvas.width  = w;
+      workCanvas.height = h;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0);
+      const d    = ctx.getImageData(0, 0, w, h).data;
+      const tol2 = tolerance * tolerance;
+
+      const isContent = mode === 'color'
+        ? (i) => {
+            if (d[i+3] === 0) return false;
+            const dr = d[i]-color.r, dg = d[i+1]-color.g, db = d[i+2]-color.b;
+            return (dr*dr + dg*dg + db*db) > tol2;
+          }
+        : (i) => d[i+3] > 0;
+
+      let top = -1;
+      outer: for (let y = 0; y < h; y++)
+        for (let x = 0; x < w; x++)
+          if (isContent((y*w+x)*4)) { top = y; break outer; }
+
+      if (top === -1) return { top:0, left:0, bottom:h-1, right:w-1 };
+
+      let bottom = top;
+      outer: for (let y = h-1; y >= top; y--)
+        for (let x = 0; x < w; x++)
+          if (isContent((y*w+x)*4)) { bottom = y; break outer; }
+
+      let left = w;
+      for (let y = top; y <= bottom; y++)
+        for (let x = 0; x < left; x++)
+          if (isContent((y*w+x)*4)) { left = x; break; }
+
+      let right = left;
+      for (let y = top; y <= bottom; y++)
+        for (let x = w-1; x > right; x--)
+          if (isContent((y*w+x)*4)) { right = x; break; }
+
+      return { top, left, bottom, right };
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // 2. AI BACKGROUND REMOVAL — pinned version, bytes progress
+    // ═══════════════════════════════════════════════════════════════
+
+    // Explicit version pin — bump when upgrading.
+    const BGR_VERSION = '1.7.0';
+    const BGR_ESM_URL = `https://cdn.jsdelivr.net/npm/@imgly/background-removal@${BGR_VERSION}/dist/index.mjs`;
+
+    let bgRemoveFn = null; // set after successful load; (blob) → Promise<Blob>
+    let bgrState   = 'idle'; // 'idle' | 'loading' | 'ready' | 'error'
 
     function setBgrState(state, errMsg) {
       bgrState = state;
@@ -835,34 +1054,167 @@
       document.getElementById('bgr-state-loading').hidden = state !== 'loading';
       document.getElementById('bgr-state-ready').hidden   = state !== 'ready';
       document.getElementById('bgr-state-error').hidden   = state !== 'error';
-      if (state !== 'ready') document.getElementById('opt-bgremove').checked = false;
       if (state === 'error' && errMsg)
         document.getElementById('bgr-err-msg').textContent = errMsg;
+      // Sync all per-card BGR buttons with the new state
+      syncAllBgrButtons();
+    }
+
+    function syncAllBgrButtons() {
+      document.querySelectorAll('.btn-card-bgr').forEach(btn => {
+        btn.disabled = bgrState !== 'ready';
+        btn.title    = bgrState === 'ready'
+          ? 'Remove background using AI (on-device)'
+          : 'Load the AI model first (use the global panel above)';
+      });
     }
 
     async function loadBgRemoval() {
       if (bgrState === 'ready')   return true;
       if (bgrState === 'loading') return false;
+
       setBgrState('loading');
+
+      const progressBar  = document.getElementById('bgr-progress-bar');
+      const progressText = document.getElementById('bgr-progress-text');
+      const loadingMsg   = document.getElementById('bgr-loading-msg');
+      progressBar.style.width  = '0%';
+      progressText.textContent = '';
+      loadingMsg.textContent   = 'Connecting…';
+
+      function onProgress(key, current, total) {
+        if (total > 0) {
+          const pct    = Math.round(current / total * 100);
+          const currMB = (current / 1_048_576).toFixed(1);
+          const totMB  = (total   / 1_048_576).toFixed(1);
+          progressBar.style.width  = pct + '%';
+          progressText.textContent = `${currMB} / ${totMB} MB`;
+        }
+      }
+
+      const baseCfg = {
+        device:   'cpu',
+        output:   { format: 'image/png' },
+        progress: onProgress,
+        // publicPath intentionally omitted — the library auto-detects it from
+        // import.meta.url (the jsDelivr ESM URL), which points to the correct
+        // model asset location for this package version.
+      };
+
       try {
-        const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.7.0/dist/index.mjs');
-        const fn = mod.default ?? mod.removeBackground;
-        // Wrap with fixed config: CPU only (avoids onnxruntime-web/webgpu import),
-        // model assets fetched from IMG.LY's CDN (default publicPath).
-        bgRemove = (blob) => fn(blob, {
+        loadingMsg.textContent = 'Importing module…';
+        const mod = await import(BGR_ESM_URL);
+        const fn  = mod.removeBackground ?? mod.default;
+        if (typeof fn !== 'function') throw new Error('removeBackground not found in module exports');
+
+        // Warm the model: use preload() if available, otherwise a tiny 1×1 inference.
+        loadingMsg.textContent = 'Downloading model…';
+        if (typeof mod.preload === 'function') {
+          await mod.preload(baseCfg);
+        } else {
+          // Trigger model download via a near-zero-cost inference on a 1×1 transparent PNG.
+          const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+          const tinyBlob = await fetch(tinyPng).then(r => r.blob());
+          await fn(tinyBlob, baseCfg);
+        }
+
+        // Store the inference function without the progress callback
+        // (model is now cached — no progress events will fire on re-use).
+        bgRemoveFn = (blob) => fn(blob, {
           device: 'cpu',
-          output: { format: 'image/png' }
+          output: { format: 'image/png' },
         });
+
         setBgrState('ready');
         return true;
       } catch (e) {
         console.error('BGR load error:', e);
-        setBgrState('error', 'Download failed — check your connection');
+        const msg = (e?.message || 'Download failed — check your connection').slice(0, 90);
+        setBgrState('error', msg);
         return false;
       }
     }
 
-    // ── DOM refs ──
+
+    // ═══════════════════════════════════════════════════════════════
+    // 3. JOB STATE — separated from DOM
+    // ═══════════════════════════════════════════════════════════════
+    // Each dropped file gets one job object. All mutable rendering
+    // state lives here; the card element is referenced but not the
+    // source of truth.
+
+    // jobs: Map<id, job>
+    const jobs = new Map();
+
+    function createJob(file) {
+      const job = {
+        id:        crypto.randomUUID(),
+        file,
+        origMime:  file.type,
+        status:    'pending', // 'pending' | 'running' | 'done' | 'error'
+        // Set after successful processing:
+        img:       null,   // HTMLImageElement — current source (may be bg-removed)
+        bounds:    null,   // { top, left, bottom, right }
+        hasBgr:    false,
+        // Per-card trim settings (snapshotted from global at process time; editable per card)
+        trimMode:  'alpha',
+        trimColor: '#ffffff',
+        trimTol:   20,
+        // Resolved output — recomputed by resolveJobOutput():
+        mime:    '',
+        ext:     '',
+        outName: '',
+        // DOM reference
+        card: null,
+      };
+      jobs.set(job.id, job);
+      return job;
+    }
+
+    // Recompute job.mime / job.ext / job.outName from current global outputFmt.
+    // Must be called before any render that uses the output format.
+    function resolveJobOutput(job) {
+      let { mime, ext } = resolveOutputFormat(job.origMime);
+      // BG-removed images always need an alpha channel — never JPEG.
+      if (job.hasBgr && mime === 'image/jpeg') {
+        mime = 'image/png'; ext = 'png';
+      }
+      job.mime    = mime;
+      job.ext     = ext;
+      job.outName = job.file.name.replace(/\.[^.]+$/, '') + '_cropped.' + ext;
+      // Keep img element in sync so renderCrop picks up the new format.
+      if (job.img) job.img._mime = mime;
+      return { mime, ext };
+    }
+
+    // Re-render every done card — called when outputFmt or padding changes.
+    function reRenderAllCards() {
+      const pad = getPadding();
+      for (const job of jobs.values()) {
+        if (job.status !== 'done' || !job.card || !job.img) continue;
+        resolveJobOutput(job);
+        applyRenderToCard(job, pad);
+      }
+    }
+
+    // Render crop and push the result into the card's DOM.
+    function applyRenderToCard(job, pad) {
+      pad = pad ?? getPadding();
+      const { dataURL, w, h, srcX, srcY } = renderCrop(job.img, job.bounds, pad);
+      const card = job.card;
+      card.dataset.outName = job.outName;
+      card.querySelector('.img-crop').src                 = dataURL;
+      card.querySelector('.dim-out').textContent          = `${w}×${h}`;
+      card.querySelector('.off-x').textContent            = srcX;
+      card.querySelector('.off-y').textContent            = srcY;
+      card.querySelector('.out-name-text').textContent    = job.outName;
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // 4. DOM REFS & STATE
+    // ═══════════════════════════════════════════════════════════════
+
     const dropZone      = document.getElementById('drop-zone');
     const fileInput     = document.getElementById('file-input');
     const results       = document.getElementById('results');
@@ -882,14 +1234,12 @@
     const paddingSlider = document.getElementById('padding-slider');
     const paddingNum    = document.getElementById('padding-num');
     const padVal        = document.getElementById('pad-val');
-    const optBgRemove   = document.getElementById('opt-bgremove');
 
-    // ── State ──
-    let cropMode   = 'alpha'; // 'alpha' | 'color'
-    let outputFmt  = 'match'; // 'match' | 'png' | 'webp' | 'jpg'
-    const cardRegistry = []; // { outName, getDataURL }
+    let cropMode  = 'alpha'; // 'alpha' | 'color'
+    let outputFmt = 'match'; // 'match' | 'png' | 'webp' | 'jpg'
 
-    // ── Mode tabs ──
+
+    // ── Crop mode tabs ──────────────────────────────────────────────
     tabAlpha.addEventListener('click', () => setMode('alpha'));
     tabColor.addEventListener('click', () => setMode('color'));
 
@@ -903,7 +1253,8 @@
       colorOpts.setAttribute('aria-hidden', mode !== 'color');
     }
 
-    // ── Output format tabs ──
+
+    // ── Output format tabs ──────────────────────────────────────────
     const fmtButtons = {
       match: document.getElementById('fmt-match'),
       png:   document.getElementById('fmt-png'),
@@ -923,58 +1274,56 @@
         : fmt === 'match'
         ? 'JPG input → JPG out (white bg); PNG/WebP input → preserved'
         : '';
+      // Rebuild output for all existing cards to reflect the new format
+      reRenderAllCards();
     }
 
     Object.entries(fmtButtons).forEach(([k, btn]) =>
       btn.addEventListener('click', () => setOutputFmt(k))
     );
 
-    // Like resolveOutputFormat but enforces non-JPEG when transparency is needed
-    function resolveOutputMimeForCard(inputMime, needsTransparency) {
-      const { mime, ext } = resolveOutputFormat(inputMime);
-      if (needsTransparency && mime === 'image/jpeg') {
-        // Fall back to PNG to preserve transparency from BG removal
-        return { mime: 'image/png', ext: 'png' };
-      }
-      return { mime, ext };
-    }
-
-    // Returns { mime, ext } for a given input MIME, respecting outputFmt
+    // Returns { mime, ext } for a given input MIME, respecting global outputFmt.
     function resolveOutputFormat(inputMime) {
       if (outputFmt === 'png')  return { mime: 'image/png',  ext: 'png'  };
       if (outputFmt === 'webp') return { mime: 'image/webp', ext: 'webp' };
       if (outputFmt === 'jpg')  return { mime: 'image/jpeg', ext: 'jpg'  };
-      // 'match': keep input format, but anything that isn't png/webp/jpeg → png
+      // 'match': keep input format, normalising obscure types to PNG
       if (inputMime === 'image/webp') return { mime: 'image/webp', ext: 'webp' };
       if (inputMime === 'image/jpeg') return { mime: 'image/jpeg', ext: 'jpg'  };
       return { mime: 'image/png', ext: 'png' };
     }
 
-    // ── Tolerance display ──
+
+    // ── Tolerance / padding controls ───────────────────────────────
     trimTolerance.addEventListener('input', () => { tolVal.textContent = trimTolerance.value; });
 
-    // ── Padding controls ──
     optPadding.addEventListener('change', () => {
       const en = optPadding.checked;
       paddingSlider.disabled = !en;
-      paddingNum.disabled = !en;
+      paddingNum.disabled    = !en;
+      if (!en) { paddingSlider.value = 0; paddingNum.value = 0; padVal.textContent = '0'; }
+      reRenderAllCards();
     });
 
     paddingSlider.addEventListener('input', () => {
       paddingNum.value = paddingSlider.value;
       padVal.textContent = paddingSlider.value;
-      refreshAllCards();
+      reRenderAllCards();
     });
 
     paddingNum.addEventListener('input', () => {
       paddingSlider.value = Math.min(200, Math.max(0, paddingNum.value || 0));
-      padVal.textContent = paddingSlider.value;
-      refreshAllCards();
+      padVal.textContent  = paddingSlider.value;
+      reRenderAllCards();
     });
 
-    // ── Background removal buttons & tooltip ──
-    document.getElementById('btn-bgr-load').addEventListener('click', loadBgRemoval);
-    document.getElementById('btn-bgr-retry').addEventListener('click', loadBgRemoval);
+
+    // ── BGR buttons & tooltip ───────────────────────────────────────
+    document.getElementById('btn-bgr-load').addEventListener('click',  loadBgRemoval);
+    document.getElementById('btn-bgr-retry').addEventListener('click', () => {
+      setBgrState('idle'); // reset so loadBgRemoval re-runs
+      loadBgRemoval();
+    });
 
     const bgrTooltip = document.getElementById('bgr-tooltip');
     document.getElementById('btn-bgr-info').addEventListener('click', (e) => {
@@ -984,15 +1333,13 @@
     document.getElementById('bgr-tooltip-close').addEventListener('click', () => {
       bgrTooltip.hidden = true;
     });
-    // Close tooltip on outside click
     document.addEventListener('click', (e) => {
-      if (!bgrTooltip.hidden && !bgrTooltip.contains(e.target) &&
-          e.target.id !== 'btn-bgr-info') {
+      if (!bgrTooltip.hidden && !bgrTooltip.contains(e.target) && e.target.id !== 'btn-bgr-info')
         bgrTooltip.hidden = true;
-      }
     });
 
-    // ── Drop zone ──
+
+    // ── Drop zone ───────────────────────────────────────────────────
     dropZone.addEventListener('click', () => fileInput.click());
     dropZone.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
@@ -1008,178 +1355,102 @@
     });
     fileInput.addEventListener('change', () => { handleFiles(fileInput.files); fileInput.value = ''; });
 
-    // ── Toolbar buttons ──
+
+    // ── Toolbar buttons ─────────────────────────────────────────────
     document.getElementById('btn-download-all').addEventListener('click', downloadAll);
     document.getElementById('btn-clear').addEventListener('click', () => {
       results.innerHTML = '';
-      cardRegistry.length = 0;
+      jobs.clear();
       toolbar.classList.remove('visible');
       statusEl.textContent = '';
     });
 
-    // ── File handling ──
+
+    // ═══════════════════════════════════════════════════════════════
+    // 5. PROCESSING PIPELINE
+    // ═══════════════════════════════════════════════════════════════
+
     async function handleFiles(fileList) {
       const files = [...fileList].filter(f => f.type.startsWith('image/'));
       if (!files.length) { statusEl.textContent = 'No valid image files selected.'; return; }
 
-      // Guard: checkbox can only be checked when state === 'ready', so no lazy-load needed here
-
       statusEl.textContent = `Processing ${files.length} file(s)…`;
-      const pad = getPadding();
-
-      const promises = files.map(f => processFile(f, pad));
-      await Promise.all(promises);
-      statusEl.textContent = `Done — ${files.length} file(s) processed.`;
+      await Promise.all(files.map(f => processFile(f)));
+      const done  = [...jobs.values()].filter(j => j.status === 'done').length;
+      const total = jobs.size;
+      statusEl.textContent = `Done — ${done} of ${total} processed.`;
       toolbar.classList.add('visible');
     }
 
-    async function processFile(file, pad) {
-      // Create a placeholder card immediately
-      const placeholderCard = createPlaceholderCard(file.name);
-      results.prepend(placeholderCard);
+    async function processFile(file) {
+      const job = createJob(file);
+      job.status = 'running';
 
-      let imgSrc;  // We'll keep the object URL alive until we no longer need it
+      // Snapshot global crop settings for this card's per-card defaults
+      job.trimMode  = cropMode;
+      job.trimColor = trimColor.value;
+      job.trimTol   = Number(trimTolerance.value);
 
+      // Create placeholder card immediately
+      const placeholder = createPlaceholderCard(file.name);
+      results.prepend(placeholder);
+
+      let imgSrc;
       try {
-        // 1. Optionally remove background
-        let sourceBlob = file;
-        if (optBgRemove.checked && bgrState === 'ready') {
-          placeholderCard.querySelector('.card-processing').innerHTML =
-            '<span class="spinner"></span>Removing background…';
-          sourceBlob = await bgRemove(file);
-        }
-
-        // 2. Load image
-        imgSrc = URL.createObjectURL(sourceBlob);
+        // 1. Load image
+        setPlaceholderMsg(placeholder, '<span class="spinner"></span>Loading…');
+        imgSrc = URL.createObjectURL(file);
         const img = await loadImage(imgSrc);
-        // If BG was removed the source is always PNG (transparent); output format still respected
-        const bgrApplied = optBgRemove.checked && bgrState === 'ready';
-        img._hasBgr  = bgrApplied;
-        // Resolve output mime/ext: BG-removed images force non-JPEG output (transparency needed)
-        const { mime, ext } = resolveOutputMimeForCard(file.type, bgrApplied);
-        img._mime = mime;
-        img._ext  = ext;
 
-        // 3. Scan bounds
-        placeholderCard.querySelector('.card-processing').innerHTML =
-          '<span class="spinner"></span>Scanning bounds…';
-        const bounds = getContentBounds(img);
+        // 2. Resolve output format
+        resolveJobOutput(job); // sets job.mime / job.ext / job.outName
+        img._mime = job.mime;
 
-        // 4. Build card
-        const outName = file.name.replace(/\.[^.]+$/, '') + '_cropped.' + img._ext;
-        const origUrl = URL.createObjectURL(file); // for original preview — revoked after img loads
+        // 3. Scan bounds (worker path when available)
+        setPlaceholderMsg(placeholder, '<span class="spinner"></span>Scanning bounds…');
+        const color = hexToRgb(job.trimColor);
+        job.bounds = await scanBounds(img, job.trimMode, color, job.trimTol);
 
-        const card = buildResultCard(file.name, img, bounds, pad, outName, origUrl, file);
-        placeholderCard.replaceWith(card);
+        job.img    = img;
+        job.status = 'done';
+
+        // 4. Build and insert card
+        const origUrl = URL.createObjectURL(file); // for original preview
+        const card    = buildResultCard(job, origUrl);
+        job.card      = card;
+        placeholder.replaceWith(card);
 
       } catch (e) {
-        placeholderCard.replaceWith(buildErrorCard(file.name, e.message));
+        job.status = 'error';
+        placeholder.replaceWith(buildErrorCard(file.name, e.message));
       } finally {
         if (imgSrc) URL.revokeObjectURL(imgSrc);
       }
     }
 
-    // ── Optimised getContentBounds ──
-    // Scans row-by-row (top→bottom, bottom→top) and col-by-col (left→right, right→left)
-    // instead of a single brute-force nested loop.
-    function getContentBounds(img, mode, color, tolerance) {
-      mode      = mode      ?? cropMode;
-      color     = color     ?? hexToRgb(trimColor.value);
-      tolerance = tolerance ?? Number(trimTolerance.value);
 
-      workCanvas.width  = img.naturalWidth;
-      workCanvas.height = img.naturalHeight;
-      ctx.clearRect(0, 0, workCanvas.width, workCanvas.height);
-      ctx.drawImage(img, 0, 0);
+    // ═══════════════════════════════════════════════════════════════
+    // 6. CARD BUILDER
+    // ═══════════════════════════════════════════════════════════════
 
-      const { data, width, height } = ctx.getImageData(0, 0, workCanvas.width, workCanvas.height);
-
-      const isContent = mode === 'color'
-        ? (i) => {
-            if (data[i+3] === 0) return false;   // fully transparent — never content
-            const dr = data[i]   - color.r;
-            const dg = data[i+1] - color.g;
-            const db = data[i+2] - color.b;
-            return Math.sqrt(dr*dr + dg*dg + db*db) > tolerance;
-          }
-        : (i) => data[i+3] > 0;                 // alpha mode: any non-transparent
-
-      // top
-      let top = -1;
-      outer: for (let y = 0; y < height; y++)
-        for (let x = 0; x < width; x++)
-          if (isContent((y * width + x) * 4)) { top = y; break outer; }
-
-      if (top === -1) return { top: 0, left: 0, bottom: height - 1, right: width - 1 };
-
-      // bottom
-      let bottom = top;
-      outer: for (let y = height - 1; y >= top; y--)
-        for (let x = 0; x < width; x++)
-          if (isContent((y * width + x) * 4)) { bottom = y; break outer; }
-
-      // left
-      let left = width;
-      for (let y = top; y <= bottom; y++)
-        for (let x = 0; x < left; x++)
-          if (isContent((y * width + x) * 4)) { left = x; break; }
-
-      // right
-      let right = left;
-      for (let y = top; y <= bottom; y++)
-        for (let x = width - 1; x > right; x--)
-          if (isContent((y * width + x) * 4)) { right = x; break; }
-
-      return { top, left, bottom, right };
-    }
-
-    // ── Render crop to off-screen canvas ──
-    function renderCrop(img, bounds, pad) {
-      const srcX = Math.max(0, bounds.left   - pad);
-      const srcY = Math.max(0, bounds.top    - pad);
-      const srcR = Math.min(img.naturalWidth  - 1, bounds.right  + pad);
-      const srcB = Math.min(img.naturalHeight - 1, bounds.bottom + pad);
-      const w = srcR - srcX + 1;
-      const h = srcB - srcY + 1;
-
-      const out = document.createElement('canvas');
-      out.width = w; out.height = h;
-      const octx = out.getContext('2d');
-
-      // JPEG has no alpha channel — fill white so transparent areas don't go black
-      if (img._mime === 'image/jpeg') {
-        octx.fillStyle = '#ffffff';
-        octx.fillRect(0, 0, w, h);
-      }
-
-      octx.drawImage(img, srcX, srcY, w, h, 0, 0, w, h);
-      return { dataURL: out.toDataURL(img._mime), w, h, srcX, srcY };
-    }
-
-    // ── Build result card ──
-    function buildResultCard(filename, img, bounds, pad, outName, origObjectUrl, origFile) {
-      const { dataURL, w, h, srcX, srcY } = renderCrop(img, bounds, pad);
-      const origW = img.naturalWidth, origH = img.naturalHeight;
+    function buildResultCard(job, origObjectUrl) {
+      resolveJobOutput(job); // ensure outName/mime are fresh
+      const pad               = getPadding();
+      const { dataURL, w, h, srcX, srcY } = renderCrop(job.img, job.bounds, pad);
+      const origW             = job.img.naturalWidth;
+      const origH             = job.img.naturalHeight;
 
       const card = document.createElement('div');
-      card.className = 'result-card';
-      card.dataset.outName = outName;
-
-      // Per-card state — preserved for re-processing
-      card._origFile   = origFile;   // original File, always kept for re-runs
-      card._img        = img;        // current source image (may be bg-removed)
-      card._bounds     = bounds;
-      card._mime       = img._mime;
-      card._hasBgr     = img._hasBgr ?? false; // whether bg was already removed
-
-      // Snapshot the global trim settings at time of processing for per-card defaults
-      card._trimMode  = cropMode;
-      card._trimColor = trimColor.value;
-      card._trimTol   = Number(trimTolerance.value);
+      card.className       = 'result-card';
+      card.dataset.outName = job.outName;
+      card.dataset.jobId   = job.id;
 
       card.innerHTML = `
         <div class="result-header">
-          <span class="filename">${escHtml(filename)}</span>
+          <div class="filename-block">
+            <span class="filename">${escHtml(job.file.name)}</span>
+            <span class="out-name"><span class="out-arrow">→</span><span class="out-name-text">${escHtml(job.outName)}</span></span>
+          </div>
           <span class="meta">${origW}×${origH} &rarr; <span class="dim-out">${w}×${h}</span> &nbsp;|&nbsp; offset (<span class="off-x">${srcX}</span>, <span class="off-y">${srcY}</span>)</span>
           <div class="card-actions">
             <button class="btn-action btn-copy-img" title="Copy cropped image to clipboard">⎘ Copy image</button>
@@ -1193,45 +1464,41 @@
         <div class="reprocess-bar">
           <span class="reprocess-label">Re-process</span>
 
-          <button class="btn-action btn-card-trim" title="Re-trim with current settings">✂ Trim</button>
+          <button class="btn-action btn-card-trim" title="Re-trim with colour settings">✂ Trim</button>
 
           <div class="card-color-wrap">
-            <label>Color <input type="color" class="card-trim-color" value="${escHtml(cropMode === 'color' ? trimColor.value : '#ffffff')}" title="Background color to trim" /></label>
+            <label>Color <input type="color" class="card-trim-color" value="${escHtml(job.trimColor)}" title="Background color to trim" /></label>
           </div>
           <div class="card-tol-wrap">
-            Tol <input type="range" class="card-trim-tol" min="0" max="128" value="${card._trimTol}" />
-            <span class="card-tol-val">${card._trimTol}</span>
+            Tol <input type="range" class="card-trim-tol" min="0" max="128" value="${job.trimTol}" />
+            <span class="card-tol-val">${job.trimTol}</span>
           </div>
 
           <div class="reprocess-sep"></div>
 
-          <button class="btn-action btn-card-bgr" title="Remove background using AI model" ${bgrState !== 'ready' ? 'disabled' : ''}>
-            ${bgrState === 'ready' ? '✦ Remove BG' : '✦ Remove BG (load model first)'}
+          <button class="btn-action btn-card-bgr"
+            ${bgrState !== 'ready' ? 'disabled' : ''}
+            title="${bgrState === 'ready' ? 'Remove background using AI (on-device)' : 'Load the AI model first (use the global panel above)'}">
+            ✦ Remove BG
           </button>
         </div>`;
 
-      // Set original preview — revoke object URL after load
+      // Original preview — revoke object URL after it loads
       const origImg = card.querySelector('.img-orig');
       origImg.src = origObjectUrl;
       origImg.addEventListener('load', () => URL.revokeObjectURL(origObjectUrl), { once: true });
 
-      // Set cropped preview
+      // Cropped preview
       card.querySelector('.img-crop').src = dataURL;
 
-      // Wire tolerance display
-      const tolSlider = card.querySelector('.card-trim-tol');
+      // Tolerance display
+      const tolSlider  = card.querySelector('.card-trim-tol');
       const tolDisplay = card.querySelector('.card-tol-val');
       tolSlider.addEventListener('input', () => { tolDisplay.textContent = tolSlider.value; });
 
-      // Register for Download All
-      cardRegistry.push({
-        outName,
-        getDataURL: () => card.querySelector('.img-crop').src,
-      });
-
       // ── Download ──
       card.querySelector('.btn-dl').addEventListener('click', () => {
-        triggerDownload(card.querySelector('.img-crop').src, outName);
+        triggerDownload(card.querySelector('.img-crop').src, card.dataset.outName);
       });
 
       // ── Copy image ──
@@ -1243,59 +1510,62 @@
           flashCopied(btn, '⎘ Copy image');
         } catch {
           btn.textContent = '✗ Not supported';
-          setTimeout(() => { btn.innerHTML = '⎘ Copy image'; }, 2000);
+          setTimeout(() => { btn.textContent = '⎘ Copy image'; }, 2000);
         }
       });
 
-      // ── Re-trim ──
+      // ── Re-trim (per-card colour trim) ──
       card.querySelector('.btn-card-trim').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
         btn.classList.add('running');
         btn.textContent = '…';
         try {
-          const color     = hexToRgb(card.querySelector('.card-trim-color').value);
-          const tol       = Number(card.querySelector('.card-trim-tol').value);
-          // Per-card trim always uses color mode (picker is explicit)
-          const newBounds = getContentBounds(card._img, 'color', color, tol);
-          card._bounds    = newBounds;
-          updateCardCrop(card);
+          const color = hexToRgb(card.querySelector('.card-trim-color').value);
+          const tol   = Number(card.querySelector('.card-trim-tol').value);
+          job.bounds  = await scanBounds(job.img, 'color', color, tol);
+          applyRenderToCard(job);
         } finally {
           btn.classList.remove('running');
           btn.textContent = '✂ Trim';
         }
       });
 
-      // ── Remove BG ──
+      // ── Remove BG (per-card, AI) ──
       card.querySelector('.btn-card-bgr').addEventListener('click', async (e) => {
         const btn = e.currentTarget;
-        if (bgrState !== 'ready') return;
+        if (bgrState !== 'ready' || !bgRemoveFn) return;
         btn.classList.add('running');
         btn.textContent = '…removing…';
+
         let newImgSrc;
         try {
-          const sourceBlob = await bgRemove(card._origFile);
-          newImgSrc = URL.createObjectURL(sourceBlob);
-          const newImg = await loadImage(newImgSrc);
-          newImg._hasBgr = true;
-          // BG removal always needs transparency — resolve format, forcing non-JPEG
-          const { mime: newMime, ext: newExt } = resolveOutputMimeForCard(card._origFile.type, true);
-          newImg._mime = newMime;
-          newImg._ext  = newExt;
-          card._img    = newImg;
-          card._mime   = newMime;
-          card._hasBgr = true;
-          // Re-scan bounds after bg removal using per-card trim settings
-          const color  = hexToRgb(card.querySelector('.card-trim-color').value);
-          const tol    = Number(card.querySelector('.card-trim-tol').value);
-          card._bounds = getContentBounds(newImg, 'color', color, tol);
-          updateCardCrop(card);
+          const bgBlob  = await bgRemoveFn(job.file);
+          newImgSrc     = URL.createObjectURL(bgBlob);
+          const newImg  = await loadImage(newImgSrc);
+
+          // Update job state before resolving output (hasBgr forces non-JPEG)
+          job.img    = newImg;
+          job.hasBgr = true;
+          resolveJobOutput(job); // updates mime/ext/outName, sets newImg._mime
+
+          // Re-scan bounds after BG removal using per-card colour settings
+          const color = hexToRgb(card.querySelector('.card-trim-color').value);
+          const tol   = Number(card.querySelector('.card-trim-tol').value);
+          job.bounds  = await scanBounds(newImg, 'color', color, tol);
+
+          applyRenderToCard(job);
         } catch (err) {
+          console.error('Per-card BGR error:', err);
           btn.textContent = '✗ Failed';
-          setTimeout(() => { btn.textContent = '✦ Remove BG'; btn.classList.remove('running'); }, 2000);
+          setTimeout(() => {
+            btn.textContent = '✦ Remove BG';
+            btn.classList.remove('running');
+          }, 2500);
           return;
         } finally {
           if (newImgSrc) URL.revokeObjectURL(newImgSrc);
         }
+
         btn.classList.remove('running');
         btn.textContent = '✦ Remove BG';
       });
@@ -1303,46 +1573,66 @@
       return card;
     }
 
-    // ── Update a card's cropped output in-place ──
-    function updateCardCrop(card) {
-      const pad = getPadding();
-      const { dataURL, w, h, srcX, srcY } = renderCrop(card._img, card._bounds, pad);
-      card.querySelector('.img-crop').src = dataURL;
-      card.querySelector('.dim-out').textContent = `${w}×${h}`;
-      card.querySelector('.off-x').textContent = srcX;
-      card.querySelector('.off-y').textContent = srcY;
+
+    // ═══════════════════════════════════════════════════════════════
+    // 7. RENDER HELPERS
+    // ═══════════════════════════════════════════════════════════════
+
+    function renderCrop(img, bounds, pad) {
+      const srcX = Math.max(0, bounds.left   - pad);
+      const srcY = Math.max(0, bounds.top    - pad);
+      const srcR = Math.min(img.naturalWidth  - 1, bounds.right  + pad);
+      const srcB = Math.min(img.naturalHeight - 1, bounds.bottom + pad);
+      const w    = srcR - srcX + 1;
+      const h    = srcB - srcY + 1;
+
+      const out  = document.createElement('canvas');
+      out.width  = w;
+      out.height = h;
+      const octx = out.getContext('2d');
+
+      if (img._mime === 'image/jpeg') {
+        octx.fillStyle = '#ffffff';
+        octx.fillRect(0, 0, w, h);
+      }
+
+      octx.drawImage(img, srcX, srcY, w, h, 0, 0, w, h);
+      return { dataURL: out.toDataURL(img._mime), w, h, srcX, srcY };
     }
 
-    // ── Live padding refresh ──
-    function refreshAllCards() {
-      document.querySelectorAll('.result-card[data-out-name]').forEach(card => {
-        if (!card._img || !card._bounds) return;
-        updateCardCrop(card);
-      });
-    }
 
-    // ── Download All as ZIP ──
+    // ═══════════════════════════════════════════════════════════════
+    // 8. DOWNLOAD ALL AS ZIP
+    // ═══════════════════════════════════════════════════════════════
+
     async function downloadAll() {
-      if (!cardRegistry.length) return;
+      const doneJobs = [...jobs.values()].filter(j => j.status === 'done' && j.card);
+      if (!doneJobs.length) return;
+
       const btn = document.getElementById('btn-download-all');
       btn.textContent = '⏳ Zipping…';
-      btn.disabled = true;
+      btn.disabled    = true;
+
       try {
         const zip = new JSZip();
-        for (const { outName, getDataURL } of cardRegistry) {
-          const dataURL = getDataURL();
-          const blob = await dataURLtoBlob(dataURL);
-          zip.file(outName, blob);
+        for (const job of doneJobs) {
+          const dataURL = job.card.querySelector('.img-crop').src;
+          const blob    = await dataURLtoBlob(dataURL);
+          zip.file(job.outName, blob);
         }
         const zipBlob = await zip.generateAsync({ type: 'blob' });
         triggerDownload(URL.createObjectURL(zipBlob), 'crop2bounds_results.zip');
       } finally {
         btn.textContent = '⬇ Download all as ZIP';
-        btn.disabled = false;
+        btn.disabled    = false;
       }
     }
 
-    // ── Helpers ──
+
+    // ═══════════════════════════════════════════════════════════════
+    // 9. UTILITIES
+    // ═══════════════════════════════════════════════════════════════
+
     function createPlaceholderCard(filename) {
       const card = document.createElement('div');
       card.className = 'result-card';
@@ -1354,20 +1644,25 @@
       return card;
     }
 
+    function setPlaceholderMsg(card, html) {
+      const el = card.querySelector('.card-processing');
+      if (el) el.innerHTML = html;
+    }
+
     function buildErrorCard(name, msg) {
       const div = document.createElement('div');
       div.className = 'result-card';
       div.innerHTML = `<div class="result-header"><span class="filename">${escHtml(name)}</span></div>
-                       <p class="error-msg">✗ ${escHtml(msg)}</p>`;
+                       <p class="error-msg">✗ ${escHtml(msg || 'Unknown error')}</p>`;
       return div;
     }
 
     function loadImage(src) {
       return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error('Failed to load image'));
-        img.src = src;
+        const img  = new Image();
+        img.onload  = () => resolve(img);
+        img.onerror = () => reject(new Error('Failed to decode image'));
+        img.src     = src;
       });
     }
 
@@ -1377,10 +1672,11 @@
     }
 
     function hexToRgb(hex) {
-      const r = parseInt(hex.slice(1,3), 16);
-      const g = parseInt(hex.slice(3,5), 16);
-      const b = parseInt(hex.slice(5,7), 16);
-      return { r, g, b };
+      return {
+        r: parseInt(hex.slice(1,3), 16),
+        g: parseInt(hex.slice(3,5), 16),
+        b: parseInt(hex.slice(5,7), 16),
+      };
     }
 
     function triggerDownload(href, filename) {
@@ -1393,14 +1689,15 @@
     }
 
     function flashCopied(btn, origLabel) {
-      const orig = origLabel ?? btn.innerHTML;
-      btn.innerHTML = '✓ Copied!';
+      btn.textContent = '✓ Copied!';
       btn.classList.add('copied');
-      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      setTimeout(() => { btn.textContent = origLabel; btn.classList.remove('copied'); }, 2000);
     }
 
     function escHtml(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
   </script>
